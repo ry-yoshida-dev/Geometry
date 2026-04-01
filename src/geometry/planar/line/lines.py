@@ -17,7 +17,7 @@ from .line import Line2D
 
 
 @dataclass
-class Lines2D(Line2DBase[np.ndarray]):
+class Lines2D(Line2DBase[np.ndarray, list[LineString]]):
     """
     N line segments with value of shape (N, 2, 2).
 

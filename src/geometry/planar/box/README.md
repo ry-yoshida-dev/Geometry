@@ -12,5 +12,3 @@ Axis-aligned 2D bounding boxes in image pixel coordinates (x right, y down). Sin
 | [format.py](./format.py) | `Box2DFormat` enum. |
 | [boxes_/](./boxes_/README.md) | Concrete XYXY / XYWH classes. |
 | [utils/](./utils/README.md) | `BboxCalculator`, `Box2dConverter`, low-level converters. |
-
-Package exports (`__init__.py`): `Box2D`, `Boxes2D`, `Box2DFormat`, `Box2dConverter`, `BboxCalculator`.

@@ -40,15 +40,13 @@ class Vector2D(Vector2DBase[float]):
         ValueError
             If the storage does not have shape (2,).
         """
-        if not isinstance(self.value, np.ndarray):
-            raise TypeError("value must be a numpy array")
         if self.value.shape != (2,):
             raise ValueError("value must have shape (2,)")
 
     @property
     def x(self) -> float:
         """
-        Horizontal component (first entry of ``value``).
+        Horizontal component (first entry of value).
 
         Returns
         -------
@@ -60,7 +58,7 @@ class Vector2D(Vector2DBase[float]):
     @property
     def y(self) -> float:
         """
-        Vertical component (second entry of ``value``).
+        Vertical component (second entry of value).
 
         Returns
         -------
@@ -77,24 +75,24 @@ class Vector2D(Vector2DBase[float]):
         Returns
         -------
         float
-            ``sqrt(dx**2 + dy**2)`` in the same units as components.
+            sqrt(dx**2 + dy**2) in the same units as components.
         """
         return float(np.linalg.norm(self.value))
 
     @property
     def unit_vector(self) -> np.ndarray:
         """
-        Unit direction with the same orientation as ``value``.
+        Unit direction with the same orientation as value.
 
         Returns
         -------
         np.ndarray
-            Shape (2,); ``value / norm``.
+            Shape (2,); value / norm.
 
         Raises
         ------
         ValueError
-            If ``norm`` is zero.
+            If norm is zero.
         """
         n = self.norm
         if n == 0:
@@ -110,7 +108,7 @@ class Vector2D(Vector2DBase[float]):
         atol: float = 1e-4,
     ) -> bool:
         """
-        Whether this vector and ``other_vector`` are orthogonal (dot product ~ 0).
+        Whether this vector and other_vector are orthogonal (dot product ~ 0).
 
         Parameters
         ----------
@@ -122,7 +120,7 @@ class Vector2D(Vector2DBase[float]):
         Returns
         -------
         bool
-            True if ``|dot(self, other)| <= atol`` in the sense of ``np.isclose``.
+            True if |dot(self, other)| <= atol in the sense of np.isclose.
         """
         return bool(np.isclose(np.dot(self.value, other_vector.value), 0.0, atol=atol))
 
@@ -132,7 +130,7 @@ class Vector2D(Vector2DBase[float]):
         atol: float = 1e-4,
     ) -> bool:
         """
-        Whether this vector and ``other_vector`` are parallel (2D cross ~ 0).
+        Whether this vector and other_vector are parallel (2D cross ~ 0).
 
         Parameters
         ----------
@@ -155,7 +153,7 @@ class Vector2D(Vector2DBase[float]):
         end_point: Point2D,
     ) -> Vector2D:
         """
-        Displacement from ``start_point`` to ``end_point``.
+        Displacement from start_point to end_point.
 
         Parameters
         ----------
@@ -167,13 +165,13 @@ class Vector2D(Vector2DBase[float]):
         Returns
         -------
         Vector2D
-            ``end_point - start_point`` as a vector.
+            end_point - start_point as a vector.
         """
         return end_point - start_point
 
     def to_line(self, origin: Point2D) -> Line2D:
         """
-        Line segment from ``origin`` along this vector (length = ``norm``).
+        Line segment from origin along this vector (length = norm).
 
         Parameters
         ----------
@@ -183,7 +181,7 @@ class Vector2D(Vector2DBase[float]):
         Returns
         -------
         Line2D
-            From ``origin`` to ``origin + value``.
+            From origin to origin + value.
         """
         from ..line import Line2D
 

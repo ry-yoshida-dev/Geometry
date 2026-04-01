@@ -1,8 +1,8 @@
 """
-Single 2D bounding box API extending the abstract base in ``base``.
+Single 2D bounding box API extending the abstract base in base.
 
-Concrete formats (XYXY, XYWH) are implemented in ``boxes_``. This module
-validates ``value`` with shape ``(4,)`` and provides conversion, cropping,
+Concrete formats (XYXY, XYWH) are implemented in boxes_. This module
+validates value with shape (4,) and provides conversion, cropping,
 and geometry helpers.
 """
 from __future__ import annotations
@@ -18,7 +18,7 @@ from .utils import Box2dConverter
 @dataclass
 class Box2D(Box2DBase[float, tuple[slice, slice]]):
     """
-    Abstract single bounding box with ``value`` of shape ``(4,)``.
+    Abstract single bounding box with value of shape (4,).
 
     Subclasses define the coordinate layout (e.g. XYXY or XYWH). Coordinates
     are absolute pixel values in image space (x right, y down).
@@ -36,7 +36,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
         Raises
         ------
         ValueError
-            If ``value`` is not shape ``(4,)``.
+            If value is not shape (4,).
         """
         if self.value.shape != (4,):
             raise ValueError(f"box must have shape (4,), but got {self.value.shape}")
@@ -129,7 +129,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
     @abstractmethod
     def y_max(self) -> float:
         """
-        Maximum y-coordinate of the box (often same as ``y2``).
+        Maximum y-coordinate of the box (often same as y2).
 
         Returns
         -------
@@ -154,12 +154,12 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
     @abstractmethod
     def center(self) -> np.ndarray:
         """
-        Center ``(cx, cy)`` of the bounding box.
+        Center (cx, cy) of the bounding box.
 
         Returns
         -------
         np.ndarray
-            Shape ``(2,)`` — center in pixel coordinates.
+            Shape (2,) - center in pixel coordinates.
         """
 
     def to_format(
@@ -177,7 +177,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
         Returns
         -------
         np.ndarray
-            Shape ``(4,)`` — same box in ``target_format``.
+            Shape (4,) - same box in target_format.
         """
         return Box2dConverter.convert_format(
             self.value.reshape(1, 4),
@@ -191,13 +191,13 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
         """
         Integer slice pair for cropping a 2D image with NumPy indexing.
 
-        Equivalent to ``image[yslice, xslice]`` when ``image`` is indexed
-        ``(row, col)`` as ``(y, x)``.
+        Equivalent to image[yslice, xslice] when image is indexed
+        (row, col) as (y, x).
 
         Returns
         -------
         tuple[slice, slice]
-            ``(yslice, xslice)`` from rounded box edges in pixel coordinates.
+            (yslice, xslice) from rounded box edges in pixel coordinates.
         """
         y_min = int(round(self.y1))
         y_max = int(round(self.y2))
@@ -212,7 +212,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
     @property
     def aspect_ratio(self) -> float:
         """
-        Aspect ratio ``height / width`` of the bounding box.
+        Aspect ratio height / width of the bounding box.
 
         Returns
         -------
@@ -256,19 +256,19 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
         box2d_format: Box2DFormat
         ) -> Box2D:
         """
-        Construct the appropriate concrete :class:`Box2D` for ``box2d_format``.
+        Construct the appropriate concrete :class:`Box2D` for box2d_format.
 
         Parameters
         ----------
         value : np.ndarray
-            Shape ``(4,)`` — layout depends on ``box2d_format``.
+            Shape (4,) - layout depends on box2d_format.
         box2d_format : Box2DFormat
             Input coordinate convention (XYXY, XYWH, or aliases).
 
         Returns
         -------
         Box2D
-            Concrete subclass instance wrapping ``value``.
+            Concrete subclass instance wrapping value.
         """
         match box2d_format:
             case Box2DFormat.XYXY | Box2DFormat.TLBR:

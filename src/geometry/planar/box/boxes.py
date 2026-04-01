@@ -1,8 +1,8 @@
 """
-Batch of 2D bounding boxes (``N`` rows, 4 columns) extending ``base.Box2D``.
+Batch of 2D bounding boxes (N rows, 4 columns) extending base.Box2D.
 
-Concrete batched formats (XYXY, XYWH) live in ``boxes_``. This module validates
-shape ``(N, 4)`` and provides per-box conversion, cropping, and Shapely access.
+Concrete batched formats (XYXY, XYWH) live in boxes_. This module validates
+shape (N, 4) and provides per-box conversion, cropping, and Shapely access.
 """
 from __future__ import annotations
 import numpy as np
@@ -17,7 +17,7 @@ from .utils import Box2dConverter
 @dataclass
 class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
     """
-    Abstract stack of ``N`` bounding boxes with ``value`` of shape ``(N, 4)``.
+    Abstract stack of N bounding boxes with value of shape (N, 4).
 
     Each row uses the same coordinate convention as the concrete subclass
     (e.g. XYXY or XYWH). Coordinates are absolute pixel values.
@@ -25,17 +25,17 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
     Attributes
     ----------
     value : np.ndarray
-        Shape ``(N, 4)``; row layout depends on :attr:`box_format`.
+        Shape (N, 4); row layout depends on :attr:`box_format`.
     """
 
     def __post_init__(self):
         """
-        Validate shape after initialization and coerce to ``ndarray``.
+        Validate shape after initialization and coerce to ndarray.
 
         Raises
         ------
         ValueError
-            If ``value`` is not 2-D with second dimension 4.
+            If value is not 2-D with second dimension 4.
         """
         v = np.asarray(self.value)
         if v.ndim != 2 or v.shape[1] != 4:
@@ -65,7 +65,7 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — width in pixels per row.
+            Shape (N,) - width in pixels per row.
         """
 
     @property
@@ -77,7 +77,7 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — height in pixels per row.
+            Shape (N,) - height in pixels per row.
         """
 
     @property
@@ -89,7 +89,7 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — minimum x per row.
+            Shape (N,) - minimum x per row.
         """
 
     @property
@@ -101,7 +101,7 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — minimum y per row.
+            Shape (N,) - minimum y per row.
         """
 
     @property
@@ -113,7 +113,7 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — maximum x per row.
+            Shape (N,) - maximum x per row.
         """
 
     @property
@@ -125,19 +125,19 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — maximum y per row.
+            Shape (N,) - maximum y per row.
         """
     
     @property
     @abstractmethod
     def y_max(self) -> np.ndarray:
         """
-        Maximum y-coordinate of each box (often same as ``y2``).
+        Maximum y-coordinate of each box (often same as y2).
 
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — bottom y per box.
+            Shape (N,) - bottom y per box.
         """
 
     @property
@@ -149,19 +149,19 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)`` — area in square pixels per row.
+            Shape (N,) - area in square pixels per row.
         """
 
     @property
     @abstractmethod
     def center(self) -> np.ndarray:
         """
-        Center ``(cx, cy)`` of each bounding box.
+        Center (cx, cy) of each bounding box.
 
         Returns
         -------
         np.ndarray
-            Shape ``(N, 2)`` — centers in pixel coordinates.
+            Shape (N, 2) - centers in pixel coordinates.
         """
 
     def to_format(
@@ -179,7 +179,7 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         np.ndarray
-            Shape ``(N, 4)`` — same boxes in ``target_format``.
+            Shape (N, 4) - same boxes in target_format.
         """
         return Box2dConverter.convert_format(
             self.value,
@@ -196,8 +196,8 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         list[tuple[slice, slice]]
-            Length ``N``; each element is ``(yslice, xslice)`` for NumPy
-            ``image[yslice, xslice]`` indexing.
+            Length N; each element is (yslice, xslice) for NumPy
+            image[yslice, xslice] indexing.
         """
         xyxy = self.to_format(Box2DFormat.XYXY)
         out: list[tuple[slice, slice]] = []
@@ -213,12 +213,12 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
     @property
     def aspect_ratio(self) -> np.ndarray:
         """
-        Aspect ratio ``height / width`` for each bounding box.
+        Aspect ratio height / width for each bounding box.
 
         Returns
         -------
         np.ndarray
-            Shape ``(N,)``.
+            Shape (N,).
 
         Raises
         ------
@@ -237,7 +237,7 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         Returns
         -------
         list[Polygon]
-            Length ``N`` — one closed ring per row.
+            Length N - one closed ring per row.
         """
         xyxy = self.to_format(Box2DFormat.XYXY)
         polys: list[Polygon] = []
@@ -263,19 +263,19 @@ class Boxes2D(Box2DBase[np.ndarray, list[tuple[slice, slice]]]):
         box2d_format: Box2DFormat
         ) -> Boxes2D:
         """
-        Construct the appropriate concrete :class:`Boxes2D` for ``box2d_format``.
+        Construct the appropriate concrete :class:`Boxes2D` for box2d_format.
 
         Parameters
         ----------
         value : np.ndarray
-            Shape ``(N, 4)`` — layout depends on ``box2d_format``.
+            Shape (N, 4) - layout depends on box2d_format.
         box2d_format : Box2DFormat
             Row coordinate convention (XYXY, XYWH, or aliases).
 
         Returns
         -------
         Boxes2D
-            Concrete subclass instance wrapping ``value``.
+            Concrete subclass instance wrapping value.
         """
         match box2d_format:
             case Box2DFormat.XYXY | Box2DFormat.TLBR:

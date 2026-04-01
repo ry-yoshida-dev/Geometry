@@ -13,10 +13,11 @@ from typing import Generic, TypeVar
 import numpy as np
 
 T = TypeVar("T", float, np.ndarray)
+S = TypeVar("S")
 
 
 @dataclass
-class Line2D(ABC, Generic[T]):
+class Line2D(ABC, Generic[T, S]):
     """
     Abstract line segment or batch stored as a NumPy array.
 
@@ -45,14 +46,14 @@ class Line2D(ABC, Generic[T]):
 
     @property
     @abstractmethod
-    def shapely(self):
+    def shapely(self) -> S:
         """
         Shapely representation: one LineString, or a list of LineStrings.
 
         Returns
         -------
-        LineString | list[LineString]
-            One line string per segment.
+        S
+            Concrete representation chosen by the subclass.
         """
 
     def __repr__(self) -> str:

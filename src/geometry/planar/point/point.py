@@ -7,16 +7,19 @@ Vector2D for displacement between points.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import numpy as np
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from shapely.geometry import Point as ShapelyPoint
 
 from .base import Point2D as Point2DBase
 
+if TYPE_CHECKING:
+    from ..vector import Vector2D
+
 
 @dataclass
-class Point2D(Point2DBase[float]):
+class Point2D(Point2DBase[float, ShapelyPoint]):
     """
     One (x, y) pair in absolute pixel coordinates stored as a length-2 vector.
 
@@ -40,8 +43,6 @@ class Point2D(Point2DBase[float]):
         ValueError
             If the storage does not have shape (2,).
         """
-        if not isinstance(self.value, np.ndarray):
-            raise TypeError("value must be a numpy array")
         if self.value.shape != (2,):
             raise ValueError(
                 f"value must have shape (2,), got shape {self.value.shape}"

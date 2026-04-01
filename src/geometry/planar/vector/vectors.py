@@ -11,20 +11,20 @@ from typing import Iterator, Union
 import numpy as np
 
 from .base import Vector2D as Vector2DBase
-from .vector2d import Vector2D
+from .vector import Vector2D
 
 
 @dataclass
 class Vectors2D(Vector2DBase[np.ndarray]):
     """
-    N displacement vectors with ``value`` of shape ``(N, 2)``.
+    N displacement vectors with value of shape (N, 2).
 
-    Each row is ``(dx, dy)`` in the same frame as :class:`Vector2D`.
+    Each row is (dx, dy) in the same frame as :class:`Vector2D`.
 
     Attributes
     ----------
     value : np.ndarray
-        Shape ``(N, 2)``.
+        Shape (N, 2).
     """
 
     def __post_init__(self) -> None:
@@ -51,7 +51,7 @@ class Vectors2D(Vector2DBase[np.ndarray]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)``.
+            Shape (N,).
         """
         return self.value[:, 0]
 
@@ -63,7 +63,7 @@ class Vectors2D(Vector2DBase[np.ndarray]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)``.
+            Shape (N,).
         """
         return self.value[:, 1]
 
@@ -75,7 +75,7 @@ class Vectors2D(Vector2DBase[np.ndarray]):
         Returns
         -------
         np.ndarray
-            Shape ``(N,)``.
+            Shape (N,).
         """
         return np.linalg.norm(self.value, axis=1)
 

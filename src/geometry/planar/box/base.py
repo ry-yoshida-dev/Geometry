@@ -1,7 +1,7 @@
 """
 Abstract 2D bounding box protocol for scalar or vector coordinate fields.
 
-``T`` is either ``float`` (single box) or ``np.ndarray`` (batch).
+T is either float (single box) or np.ndarray (batch).
 Coordinates are always absolute pixel values in image space (x right, y down).
 """
 from __future__ import annotations
@@ -31,7 +31,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     Attributes
     ----------
     value : np.ndarray
-        For a single box, shape ``(4,)``; for a batch, shape ``(N, 4)``.
+        For a single box, shape (4,); for a batch, shape (N, 4).
     """
     value: np.ndarray
 
@@ -128,7 +128,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
         Returns
         -------
         T
-            Bottom y in pixel coordinates (often same as ``y2``).
+            Bottom y in pixel coordinates (often same as y2).
         """
 
     @property
@@ -145,14 +145,14 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     @property
     @abstractmethod
-    def center(self) -> T:
+    def center(self) -> np.ndarray:
         """
-        Center ``(cx, cy)`` of the box or each box.
+        Center (cx, cy) of the box or each box.
 
         Returns
         -------
-        T
-            For a batch, typically shape ``(N, 2)``.
+        np.ndarray
+            For a batch, typically shape (N, 2).
         """
 
     @property
@@ -161,13 +161,13 @@ class Box2D(ABC, Generic[T, CropSliceT]):
         """
         Integer slice pair(s) for cropping a 2D image with NumPy indexing.
 
-        For a single box, ``(yslice, xslice)`` for ``image[yslice, xslice]``.
-        For a batch, one such pair per row (length ``N``).
+        For a single box, (yslice, xslice) for image[yslice, xslice].
+        For a batch, one such pair per row (length N).
 
         Returns
         -------
         CropSliceT
-            ``tuple[slice, slice]`` or ``list[tuple[slice, slice]]``.
+            tuple[slice, slice] or list[tuple[slice, slice]].
         """
 
     def to_format(
@@ -185,7 +185,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
         Returns
         -------
         np.ndarray
-            Same leading shape as ``value`` with last dimension 4.
+            Same leading shape as value with last dimension 4.
         """
         return Box2dConverter.convert_format(
             self.value,
@@ -198,7 +198,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     @abstractmethod
     def aspect_ratio(self) -> T:
         """
-        Aspect ratio ``height / width`` of the box or each box.
+        Aspect ratio height / width of the box or each box.
 
         Returns
         -------
@@ -238,9 +238,9 @@ class Box2D(ABC, Generic[T, CropSliceT]):
         Parameters
         ----------
         value : np.ndarray
-            Coordinate array; shape ``(4,)`` or ``(N, 4)`` depending on subclass.
+            Coordinate array; shape (4,) or (N, 4) depending on subclass.
         box2d_format : Box2DFormat
-            Layout of ``value`` (XYXY, XYWH, or aliases).
+            Layout of value (XYXY, XYWH, or aliases).
 
         Returns
         -------

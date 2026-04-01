@@ -18,7 +18,7 @@ from .base import Line2D as Line2DBase
 
 
 @dataclass
-class Line2D(Line2DBase[float]):
+class Line2D(Line2DBase[float, LineString]):
     """
     One line segment stored as two (x, y) rows in absolute pixel coordinates.
 
@@ -43,8 +43,6 @@ class Line2D(Line2DBase[float]):
         ValueError
             If the storage does not have shape (2, 2).
         """
-        if not isinstance(self.value, np.ndarray):
-            raise TypeError("value must be a numpy array")
         if self.value.shape != (2, 2):
             raise ValueError(f"value must have shape (2, 2), got {self.value.shape}")
 

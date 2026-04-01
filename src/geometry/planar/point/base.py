@@ -12,12 +12,14 @@ from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 import numpy as np
+from shapely.geometry.base import BaseGeometry
 
 T = TypeVar("T", float, np.ndarray)
+G = TypeVar("G", bound=BaseGeometry)
 
 
 @dataclass
-class Point2D(ABC, Generic[T]):
+class Point2D(ABC, Generic[T, G]):
     """
     Abstract single point or batch stored as a NumPy array.
 
@@ -58,14 +60,14 @@ class Point2D(ABC, Generic[T]):
 
     @property
     @abstractmethod
-    def shapely(self):
+    def shapely(self) -> G:
         """
         Shapely geometry for this point or point set.
 
         Returns
         -------
-        shapely.geometry.BaseGeometry
-            Concrete type depends on the subclass (e.g. Point or Polygon).
+        G
+            Concrete geometry type of the subclass (e.g. Point or Polygon).
         """
 
     def __repr__(self) -> str:

@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Iterator, Union
 
 import numpy as np
-from scipy.spatial import ConvexHull
+from scipy.spatial import ConvexHull # type: ignore
 from shapely.geometry import Polygon
 
 from .base import Point2D as Point2DBase
@@ -18,19 +18,19 @@ from .point import Point2D
 
 
 @dataclass
-class Points2D(Point2DBase[np.ndarray]):
+class Points2D(Point2DBase[np.ndarray, Polygon]):
     """
     N points with value of shape (N, 2).
 
-    Each row is (x, y) in pixel coordinates. Optional ``is_convex_hull`` selects
-    how ``shapely`` builds geometry from the rows.
+    Each row is (x, y) in pixel coordinates. Optional is_convex_hull selects
+    how shapely builds geometry from the rows.
 
     Attributes
     ----------
     value : np.ndarray
         Shape (N, 2) in pixel coordinates.
     is_convex_hull : bool
-        If True, ``shapely`` uses the convex hull polygon; otherwise vertices
+        If True, shapely uses the convex hull polygon; otherwise vertices
         are used in row order as a ring (see Shapely Polygon semantics).
     """
 
@@ -47,8 +47,6 @@ class Points2D(Point2DBase[np.ndarray]):
         ValueError
             If the array is not two-dimensional with two columns.
         """
-        if not isinstance(self.value, np.ndarray):
-            raise TypeError("coordinates must be a numpy array")
         v = np.asarray(self.value)
         if v.ndim != 2:
             raise ValueError("coordinates must have shape (n, 2)")
@@ -83,7 +81,7 @@ class Points2D(Point2DBase[np.ndarray]):
     @property
     def area(self) -> float:
         """
-        Area of the polygon returned by ``shapely`` (Shapely’s signed area).
+        Area of the polygon returned by shapely (Shapely's signed area).
 
         Returns
         -------
@@ -125,7 +123,7 @@ class Points2D(Point2DBase[np.ndarray]):
         Returns
         -------
         Point2D | Points2D
-            One point or a new Points2D sharing the same ``is_convex_hull`` flag.
+            One point or a new Points2D sharing the same is_convex_hull flag.
         """
         result = self.value[index]
         if isinstance(index, slice):
@@ -142,12 +140,12 @@ class Points2D(Point2DBase[np.ndarray]):
         Parameters
         ----------
         coord : np.ndarray | tuple[float, float]
-            Length-2 coordinate in the same dtype as ``value``.
+            Length-2 coordinate in the same dtype as value.
 
         Raises
         ------
         ValueError
-            If ``coord`` does not resolve to shape (2,).
+            If coord does not resolve to shape (2,).
         """
         coord = np.asarray(coord, dtype=self.value.dtype)
         if coord.shape != (2,):
@@ -156,7 +154,7 @@ class Points2D(Point2DBase[np.ndarray]):
 
     def delete(self, index: int) -> None:
         """
-        Remove the point at ``index`` along axis 0.
+        Remove the point at index along axis 0.
 
         Parameters
         ----------
@@ -172,12 +170,12 @@ class Points2D(Point2DBase[np.ndarray]):
         Parameters
         ----------
         other : Points2D
-            Second collection; ``is_convex_hull`` is taken from ``self``.
+            Second collection; is_convex_hull is taken from self.
 
         Returns
         -------
         Points2D
-            Rows of ``self`` followed by rows of ``other``.
+            Rows of self followed by rows of other.
         """
         return Points2D(
             value=np.vstack([self.value, other.value]),
@@ -193,7 +191,7 @@ class Points2D(Point2DBase[np.ndarray]):
         coord: Union[np.ndarray, tuple[float, float]],
     ) -> bool:
         """
-        Whether ``coord`` appears as a row (exact match via ``in`` on ndarray).
+        Whether coord appears as a row (exact match via in on ndarray).
 
         Parameters
         ----------
@@ -203,7 +201,7 @@ class Points2D(Point2DBase[np.ndarray]):
         Returns
         -------
         bool
-            True if a row equals ``coord`` under NumPy membership rules.
+            True if a row equals coord under NumPy membership rules.
         """
         return coord in self.value
 
@@ -223,7 +221,7 @@ class Points2D(Point2DBase[np.ndarray]):
     @property
     def convex_hull_polygon(self) -> Polygon:
         """
-        Convex hull as a Shapely ``Polygon``.
+        Convex hull as a Shapely Polygon.
 
         Returns
         -------
@@ -237,7 +235,7 @@ class Points2D(Point2DBase[np.ndarray]):
         """
         Polygon built from these points or from their convex hull.
 
-        When ``is_convex_hull`` is True, the hull polygon is returned; otherwise
+        When is_convex_hull is True, the hull polygon is returned; otherwise
         rows define the polygon ring in order (see Shapely for degenerate cases).
 
         Returns

@@ -72,13 +72,13 @@ class Vector2DPair:
         return np.dot(self.vector1.value, self.vector2.value)
 
     @property
-    def cross_product(self) -> float:
+    def cross_product(self) -> np.ndarray:
         """
         Return the cross product of the two vectors.
 
         Returns
         -------
-        float: The cross product of the two vectors.
+        np.ndarray: The cross product of the two vectors.
         """
         return np.cross(self.vector1.value, self.vector2.value)
 
