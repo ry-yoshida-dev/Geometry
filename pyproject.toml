@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geometry"
+version = "0.0.1"
+authors = [
+  { name = "Ryuto Yoshida" },
+]
+description = "2D/3D geometry primitives and utilities (points, lines, vectors, boxes, coordinates)."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "shapely",
+    "units @ git+https://github.com/ry-yoshida-private/Units.git",
+]
+
+[project.urls]
+Homepage = "https://github.com/ry-yoshida-private/Geometry"
+"Bug Tracker" = "https://github.com/ry-yoshida-private/Geometry/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+geometry = ["py.typed"]
