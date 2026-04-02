@@ -10,7 +10,6 @@ from cartesian_axis import (
 from .point import (
     Point3D, 
     Points3D, 
-    SequentialPoint3D
     )
 from .line import Line3D
 from .vector import (
@@ -34,7 +33,6 @@ __all__ = [
     "SoftwareCoordinateSystem",
     "Point3D",
     "Points3D",
-    "SequentialPoint3D",
     "Line3D",
     "Vector3D",
     "Vectors3D",
