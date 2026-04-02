@@ -11,7 +11,10 @@ from .point import (
     Point3D, 
     Points3D, 
     )
-from .line import Line3D
+from .line import (
+    Line3D,
+    Lines3D,
+    )
 from .vector import (
     Vector3D,
     Vectors3D,
@@ -34,6 +37,7 @@ __all__ = [
     "Point3D",
     "Points3D",
     "Line3D",
+    "Lines3D",
     "Vector3D",
     "Vectors3D",
     "Vector3DPair",

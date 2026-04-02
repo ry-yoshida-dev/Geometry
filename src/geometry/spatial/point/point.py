@@ -2,12 +2,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
 from typing import TYPE_CHECKING
+from .base import Point3D as Point3DBase
 
 if TYPE_CHECKING:
     from ..vector import Vector3D
 
 @dataclass
-class Point3D:
+class Point3D(Point3DBase[float]):
     value: np.ndarray
 
     def __post_init__(self):
@@ -26,9 +27,6 @@ class Point3D:
     def z(self) -> float:
         return self.value[2]
     
-    def __repr__(self) -> str:
-        return f"Point3D(x={self.x}, y={self.y}, z={self.z})"
-
     @property
     def array(self) -> np.ndarray:
         return self.value

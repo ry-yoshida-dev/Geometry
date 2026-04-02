@@ -1,13 +1,14 @@
 from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
-from typing import Iterator
+from typing import Iterator, Union
 from scipy.spatial.distance import cdist
 
+from .base import Point3D as Point3DBase
 from .point import Point3D
 
 @dataclass
-class Points3D:
+class Points3D(Point3DBase[np.ndarray]):
     value: np.ndarray
 
     def __post_init__(self):
@@ -127,8 +128,11 @@ class Points3D:
     def __len__(self) -> int:
         return len(self.value)
     
-    def __getitem__(self, index: int) -> Point3D:
-        return Point3D(value=self.value[index])
+    def __getitem__(self, index: Union[int, slice]) -> Union[Point3D, "Points3D"]:
+        result = self.value[index]
+        if isinstance(index, slice):
+            return Points3D(value=result)
+        return Point3D(value=result)
     
     def __iter__(self) -> Iterator[Point3D]:
         for value in self.value:

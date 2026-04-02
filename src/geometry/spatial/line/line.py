@@ -5,9 +5,10 @@ from dataclasses import dataclass
 
 from ..point import Point3D
 from ..vector import Vector3D
+from .base import Line3D as Line3DBase
 
 @dataclass
-class Line3D:
+class Line3D(Line3DBase[float]):
     value: np.ndarray
 
     def __post_init__(self):

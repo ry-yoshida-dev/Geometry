@@ -7,9 +7,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .normalized_orthogonal_vectors import OrthonormalBasis
 from ..point import Point3D
+from .base import Vector3D as Vector3DBase
 
 @dataclass
-class Vector3D:
+class Vector3D(Vector3DBase[float]):
     value: np.ndarray
 
     def __post_init__(self):
@@ -29,14 +30,15 @@ class Vector3D:
         return self.value[2]
 
     @property
+    def norm(self) -> float:
+        return float(np.linalg.norm(self.value))
+
+    @property
     def unit_vector(self) -> np.ndarray:
         norm = np.linalg.norm(self.value)
         if norm == 0:
             raise ValueError("Cannot compute a unit vector from a zero-length vector.")
         return self.value / norm 
-
-    def __repr__(self) -> str:
-        return f"Vector3D(x={self.x}, y={self.y}, z={self.z})"
 
     def cross(
         self, 
