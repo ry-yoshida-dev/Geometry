@@ -1,5 +1,5 @@
 from .coordinate import PolarCoordinate
-from src.utils.common.units import Angle, AngleUnit
+from units import Angle, AngleUnit
 
 __all__ = [
     "PolarCoordinate",
