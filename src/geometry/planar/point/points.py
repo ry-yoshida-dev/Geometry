@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from typing import Iterator, Union
 
 import numpy as np
+from scipy.spatial.distance import cdist
 from scipy.spatial import ConvexHull # type: ignore
 from shapely.geometry import Polygon
 
@@ -129,6 +130,17 @@ class Points2D(Point2DBase[np.ndarray, Polygon]):
         if isinstance(index, slice):
             return Points2D(value=result, is_convex_hull=self.is_convex_hull)
         return Point2D(value=result)
+
+    @property
+    def distance_matrix(self) -> np.ndarray:
+        """
+        Get the distance matrix of the points.
+
+        Returns
+        -------
+        np.ndarray: The distance matrix of the points with shape (n, n).
+        """
+        return cdist(self.value, self.value, metric='euclidean')
 
     def append(
         self,
