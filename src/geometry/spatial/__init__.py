@@ -1,5 +1,5 @@
 from .coordinate_type import CoordinateType
-from .cartesian_axis import (
+from cartesian_axis import (
     Axis, 
     AxisName,
     AxisOrientation, 
