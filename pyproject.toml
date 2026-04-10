@@ -17,8 +17,13 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
+    "numpy",
+    "scipy",
     "shapely",
     "units @ git+https://github.com/ry-yoshida-private/Units.git",
+    "rotation @ git+https://github.com/ry-yoshida-private/Rotation.git",
+    "cartesian-axis-3d @ git+https://github.com/ry-yoshida-private/CartesianAxis3D.git",
+    "handedness-rotation @ git+https://github.com/ry-yoshida-private/HandednessRotation.git",
 ]
 
 [project.urls]
