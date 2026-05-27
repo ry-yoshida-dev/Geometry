@@ -20,15 +20,15 @@ dependencies = [
     "numpy",
     "scipy",
     "shapely",
-    "units @ git+https://github.com/ry-yoshida-private/Units.git",
-    "rotation @ git+https://github.com/ry-yoshida-private/Rotation.git",
-    "cartesian-axis-3d @ git+https://github.com/ry-yoshida-private/CartesianAxis3D.git",
-    "handedness-rotation @ git+https://github.com/ry-yoshida-private/HandednessRotation.git",
+    "units @ git+https://github.com/ry-yoshida-dev/Units.git",
+    "rotation @ git+https://github.com/ry-yoshida-dev/Rotation.git",
+    "cartesian-axis-3d @ git+https://github.com/ry-yoshida-dev/CartesianAxis3D.git",
+    "handedness-rotation @ git+https://github.com/ry-yoshida-dev/HandednessRotation.git",
 ]
 
 [project.urls]
-Homepage = "https://github.com/ry-yoshida-private/Geometry"
-"Bug Tracker" = "https://github.com/ry-yoshida-private/Geometry/issues"
+Homepage = "https://github.com/ry-yoshida-dev/Geometry"
+"Bug Tracker" = "https://github.com/ry-yoshida-dev/Geometry/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
