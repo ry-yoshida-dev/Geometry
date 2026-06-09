@@ -1,11 +1,11 @@
 """
 Abstract 2D bounding box protocol for scalar or vector coordinate fields.
 
-T is either float (single box) or FloatArray (batch).
+T is either NumericScalar (single box) or NumericArray (batch).
 Coordinates are always absolute pixel values in image space (x right, y down).
 """
 from __future__ import annotations
-from ...array_types import FloatArray
+from ...array_types import FloatArray, NumericArray, NumericScalar
 import numpy as np
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -14,7 +14,7 @@ from typing import Generic, TypeVar
 from .format import Box2DFormat
 from .utils import Box2dConverter
 
-T = TypeVar('T', float, FloatArray)
+T = TypeVar('T', NumericScalar, NumericArray)
 CropSliceT = TypeVar(
     'CropSliceT',
     tuple[slice, slice],
@@ -31,10 +31,10 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         For a single box, shape (4,); for a batch, shape (N, 4).
     """
-    value: FloatArray
+    value: NumericArray
 
     @property
     @abstractmethod
@@ -146,13 +146,13 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     @property
     @abstractmethod
-    def center(self) -> FloatArray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of the box or each box.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             For a batch, typically shape (N, 2).
         """
 
@@ -174,7 +174,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     def to_format(
         self, 
         target_format: Box2DFormat, 
-        ) -> FloatArray:
+        ) -> NumericArray:
         """
         Convert stored coordinates to another layout.
 
@@ -185,7 +185,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Same leading shape as value with last dimension 4.
         """
         return Box2dConverter.convert_format(
@@ -197,13 +197,13 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     @property
     @abstractmethod
-    def aspect_ratio(self) -> T:
+    def aspect_ratio(self) -> float | FloatArray:
         """
         Aspect ratio height / width of the box or each box.
 
         Returns
         -------
-        T
+        float | FloatArray
             Height divided by width.
 
         Raises
@@ -211,9 +211,6 @@ class Box2D(ABC, Generic[T, CropSliceT]):
         ZeroDivisionError
             If any width is zero (batch: if any row has zero width).
         """
-        if self.width == 0:
-            raise ZeroDivisionError("Width of the box is zero, cannot compute aspect ratio.")
-        return self.height / self.width
 
     def __repr__(self) -> str:
         cls_name = self.__class__.__name__
@@ -227,18 +224,18 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     @abstractmethod
     def register(
         cls, 
-        value: FloatArray, 
+        value: NumericArray, 
         box2d_format: Box2DFormat
         ) -> (
-            Box2D[float, tuple[slice, slice]]
-            | Box2D[FloatArray, list[tuple[slice, slice]]]
+            Box2D[NumericScalar, tuple[slice, slice]]
+            | Box2D[NumericArray, list[tuple[slice, slice]]]
         ):
         """
         Construct a concrete subclass from raw array data.
 
         Parameters
         ----------
-        value : FloatArray
+        value : NumericArray
             Coordinate array; shape (4,) or (N, 4) depending on subclass.
         box2d_format : Box2DFormat
             Layout of value (XYXY, XYWH, or aliases).

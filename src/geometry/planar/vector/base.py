@@ -1,20 +1,20 @@
 """
 Abstract 2D vector protocol for scalar or batch storage.
 
-The type parameter T is either float (single-component or scalar magnitude) or
-FloatArray (per-row values for a batch). Components follow image space
+The type parameter T is either NumericScalar (single component) or
+NumericArray (per-row values for a batch). Components follow image space
 (x right, y down), consistent with Point2D and Line2D.
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import FloatArray, NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", float, FloatArray)
+T = TypeVar("T", NumericScalar, NumericArray)
 
 
 @dataclass
@@ -27,11 +27,11 @@ class Vector2D(ABC, Generic[T]):
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         One vector: shape (2,). A batch: shape (N, 2).
     """
 
-    value: FloatArray
+    value: NumericArray
 
     @property
     @abstractmethod
@@ -59,13 +59,13 @@ class Vector2D(ABC, Generic[T]):
 
     @property
     @abstractmethod
-    def norm(self) -> T:
+    def norm(self) -> float | FloatArray:
         """
         Euclidean length (magnitude) of the vector or each row.
 
         Returns
         -------
-        T
+        float | FloatArray
             Scalar norm for one vector, or an array of shape (N,) for a batch.
         """
 

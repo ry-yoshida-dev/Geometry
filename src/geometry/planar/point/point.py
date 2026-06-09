@@ -7,7 +7,7 @@ Vector2D for displacement between points.
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import NumericArray, NumericScalar
 import numpy as np
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class Point2D(Point2DBase[float, ShapelyPoint]):
+class Point2D(Point2DBase[NumericScalar, ShapelyPoint]):
     """
     One (x, y) pair in absolute pixel coordinates stored as a length-2 vector.
 
@@ -29,7 +29,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         Shape (2,). Index 0 is x, index 1 is y.
     """
 
@@ -50,19 +50,19 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
             )
 
     @property
-    def array(self) -> FloatArray:
+    def array(self) -> NumericArray:
         """
         A copy of the underlying coordinate vector.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (2,); modifying the copy does not affect this point.
         """
         return self.value.copy()
 
     @property
-    def tuple(self) -> tuple[float, float]:
+    def tuple(self) -> tuple[NumericScalar, NumericScalar]:
         """
         The point as a plain Python (x, y) pair.
 
@@ -86,7 +86,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
         return [self.x, self.y]
 
     @property
-    def x(self) -> float:
+    def x(self) -> NumericScalar:
         """
         Horizontal coordinate (first component of the value vector).
 
@@ -95,10 +95,10 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
         float
             x in pixel coordinates.
         """
-        return float(self.value[0])
+        return self.value[0].item()
 
     @property
-    def y(self) -> float:
+    def y(self) -> NumericScalar:
         """
         Vertical coordinate (second component of the value vector).
 
@@ -107,7 +107,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
         float
             y in pixel coordinates.
         """
-        return float(self.value[1])
+        return self.value[1].item()
 
     @property
     def shapely(self) -> ShapelyPoint:
@@ -124,7 +124,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
     def __repr__(self) -> str:
         return f"Point2D(x={self.x}, y={self.y})"
 
-    def __add__(self, other: Point2D) -> FloatArray:
+    def __add__(self, other: Point2D) -> NumericArray:
         """
         Element-wise sum of coordinate vectors (returns a raw ndarray).
 
@@ -135,7 +135,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (2,); sum of the two value arrays.
         """
         return self.value + other.value
@@ -158,7 +158,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
         return Vector2D(value=self.value - other.value)
 
-    def __mul__(self, other: float) -> FloatArray:
+    def __mul__(self, other: float) -> NumericArray:
         """
         Scale coordinates by a scalar (returns a raw ndarray).
 
@@ -169,7 +169,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (2,); scaled coordinates.
         """
         return self.value * other

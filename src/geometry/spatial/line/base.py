@@ -1,19 +1,19 @@
 """
 Abstract 3D line segment protocol for scalar or batch storage.
 
-The type parameter T is either float (single-segment length) or FloatArray
+The type parameter T is either float (single-segment length) or NumericArray
 (per-row lengths for a batch).
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", float, FloatArray)
+T = TypeVar("T", float, NumericArray)
 
 
 @dataclass
@@ -25,7 +25,7 @@ class Line3D(ABC, Generic[T]):
     A batch has shape (N, 2, 3).
     """
 
-    value: FloatArray
+    value: NumericArray
 
     @property
     @abstractmethod

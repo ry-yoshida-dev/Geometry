@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ...array_types import FloatArray
+from ...array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
 import numpy as np
 from typing import TYPE_CHECKING
@@ -9,27 +9,27 @@ if TYPE_CHECKING:
     from ..vector import Vector3D
 
 @dataclass
-class Point3D(Point3DBase[float]):
-    value: FloatArray
+class Point3D(Point3DBase[NumericScalar]):
+    value: NumericArray
 
     def __post_init__(self):
         if self.value.shape != (3,):
             raise ValueError("value must have shape (3,)")
     
     @property
-    def x(self) -> float:
-        return self.value[0]
+    def x(self) -> NumericScalar:
+        return self.value[0].item()
     
     @property
-    def y(self) -> float:
-        return self.value[1]
+    def y(self) -> NumericScalar:
+        return self.value[1].item()
     
     @property
-    def z(self) -> float:
-        return self.value[2]
+    def z(self) -> NumericScalar:
+        return self.value[2].item()
     
     @property
-    def array(self) -> FloatArray:
+    def array(self) -> NumericArray:
         return self.value
     
     @property

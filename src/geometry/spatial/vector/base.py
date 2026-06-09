@@ -1,19 +1,19 @@
 """
 Abstract 3D vector protocol for scalar or batch storage.
 
-The type parameter T is either float (single-component or scalar magnitude) or
-FloatArray (per-row values for a batch).
+The type parameter T is either NumericScalar (single component) or
+NumericArray (per-row values for a batch).
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import FloatArray, NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", float, FloatArray)
+T = TypeVar("T", NumericScalar, NumericArray)
 
 
 @dataclass
@@ -25,7 +25,7 @@ class Vector3D(ABC, Generic[T]):
     A batch has shape (N, 3): one row per vector.
     """
 
-    value: FloatArray
+    value: NumericArray
 
     @property
     @abstractmethod
@@ -44,7 +44,7 @@ class Vector3D(ABC, Generic[T]):
 
     @property
     @abstractmethod
-    def norm(self) -> T:
+    def norm(self) -> float | FloatArray:
         """Euclidean length (magnitude) of the vector(s)."""
 
     def __repr__(self) -> str:

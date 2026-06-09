@@ -5,7 +5,7 @@ Validates shape (N, 2, 2) and provides per-segment length, endpoints, and Shapel
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import NumericArray
 from dataclasses import dataclass
 from typing import Union
 
@@ -18,7 +18,7 @@ from .line import Line2D
 
 
 @dataclass
-class Lines2D(Line2DBase[FloatArray, list[LineString]]):
+class Lines2D(Line2DBase[NumericArray, list[LineString]]):
     """
     N line segments with value of shape (N, 2, 2).
 
@@ -26,7 +26,7 @@ class Lines2D(Line2DBase[FloatArray, list[LineString]]):
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         Shape (N, 2, 2) in pixel coordinates.
     """
 
@@ -71,13 +71,13 @@ class Lines2D(Line2DBase[FloatArray, list[LineString]]):
         return Points2D(value=self.value[:, 1, :])
 
     @property
-    def length(self) -> FloatArray:
+    def length(self) -> NumericArray:
         """
         Euclidean length of each segment.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (N,): one length per segment.
         """
         d = self.value[:, 1, :] - self.value[:, 0, :]
@@ -96,13 +96,13 @@ class Lines2D(Line2DBase[FloatArray, list[LineString]]):
         return Points2D(value=np.mean(self.value, axis=1))
 
     @property
-    def vectors(self) -> FloatArray:
+    def vectors(self) -> NumericArray:
         """
         Displacement from start to end for each segment.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (N, 2): end minus start per row.
         """
         return self.value[:, 1, :] - self.value[:, 0, :]

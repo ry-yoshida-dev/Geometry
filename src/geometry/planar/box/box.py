@@ -6,7 +6,7 @@ validates value with shape (4,) and provides conversion, cropping,
 and geometry helpers.
 """
 from __future__ import annotations
-from ...array_types import FloatArray
+from ...array_types import NumericArray, NumericScalar
 import numpy as np
 from abc import abstractmethod
 from dataclasses import dataclass
@@ -17,7 +17,7 @@ from .format import Box2DFormat
 from .utils import Box2dConverter
 
 @dataclass
-class Box2D(Box2DBase[float, tuple[slice, slice]]):
+class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
     """
     Abstract single bounding box with value of shape (4,).
 
@@ -26,7 +26,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         Length-4 array; interpretation depends on :attr:`box_format`.
     """
 
@@ -56,7 +56,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def width(self) -> float:
+    def width(self) -> NumericScalar:
         """
         Width of the box (horizontal extent).
 
@@ -68,7 +68,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def height(self) -> float:
+    def height(self) -> NumericScalar:
         """
         Height of the box (vertical extent).
 
@@ -80,7 +80,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def x1(self) -> float:
+    def x1(self) -> NumericScalar:
         """
         Left edge (minimum x) of the box.
 
@@ -92,7 +92,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def y1(self) -> float:
+    def y1(self) -> NumericScalar:
         """
         Top edge (minimum y) of the box.
 
@@ -104,7 +104,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def x2(self) -> float:
+    def x2(self) -> NumericScalar:
         """
         Right edge (maximum x) of the box.
 
@@ -116,7 +116,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def y2(self) -> float:
+    def y2(self) -> NumericScalar:
         """
         Bottom edge (maximum y) of the box.
 
@@ -128,7 +128,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
     
     @property
     @abstractmethod
-    def y_max(self) -> float:
+    def y_max(self) -> NumericScalar:
         """
         Maximum y-coordinate of the box (often same as y2).
 
@@ -140,7 +140,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def area(self) -> float:
+    def area(self) -> NumericScalar:
         """
         Area of the axis-aligned rectangle.
 
@@ -153,20 +153,20 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def center(self) -> FloatArray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of the bounding box.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (2,) - center in pixel coordinates.
         """
 
     def to_format(
         self, 
         target_format: Box2DFormat, 
-        ) -> FloatArray:
+        ) -> NumericArray:
         """
         Convert this box to another coordinate layout.
 
@@ -177,7 +177,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (4,) - same box in target_format.
         """
         return Box2dConverter.convert_format(
@@ -227,7 +227,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
         """
         if self.width == 0:
             raise ZeroDivisionError("Width of the box is zero, cannot compute aspect ratio.")
-        return self.height / self.width
+        return float(self.height / self.width)
 
     @property
     def shapely(self) -> Polygon:
@@ -253,7 +253,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
     @classmethod
     def register(
         cls, 
-        value: FloatArray, 
+        value: NumericArray, 
         box2d_format: Box2DFormat
         ) -> Box2D:
         """
@@ -261,7 +261,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
         Parameters
         ----------
-        value : FloatArray
+        value : NumericArray
             Shape (4,) - layout depends on box2d_format.
         box2d_format : Box2DFormat
             Input coordinate convention (XYXY, XYWH, or aliases).

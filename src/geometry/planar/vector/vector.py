@@ -6,7 +6,7 @@ direction; and helpers for orthogonality, parallelism, and conversion to Line2D.
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -20,13 +20,13 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class Vector2D(Vector2DBase[float]):
+class Vector2D(Vector2DBase[NumericScalar]):
     """
     One 2D vector (dx, dy) in the same coordinate frame as Point2D / Line2D.
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         Shape (2,). Index 0 is x (horizontal), index 1 is y (vertical).
     """
 
@@ -45,7 +45,7 @@ class Vector2D(Vector2DBase[float]):
             raise ValueError("value must have shape (2,)")
 
     @property
-    def x(self) -> float:
+    def x(self) -> NumericScalar:
         """
         Horizontal component (first entry of value).
 
@@ -54,10 +54,10 @@ class Vector2D(Vector2DBase[float]):
         float
             dx in coordinate units.
         """
-        return float(self.value[0])
+        return self.value[0].item()
 
     @property
-    def y(self) -> float:
+    def y(self) -> NumericScalar:
         """
         Vertical component (second entry of value).
 
@@ -66,7 +66,7 @@ class Vector2D(Vector2DBase[float]):
         float
             dy in coordinate units.
         """
-        return float(self.value[1])
+        return self.value[1].item()
 
     @property
     def norm(self) -> float:
@@ -81,13 +81,13 @@ class Vector2D(Vector2DBase[float]):
         return float(np.linalg.norm(self.value))
 
     @property
-    def unit_vector(self) -> FloatArray:
+    def unit_vector(self) -> NumericArray:
         """
         Unit direction with the same orientation as value.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (2,); value / norm.
 
         Raises

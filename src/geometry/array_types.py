@@ -5,11 +5,12 @@ Dtype is expressed through ``numpy.typing.NDArray``. Shape constraints are
 enforced at runtime in dataclass validators and described in class docstrings.
 """
 
-from typing import TypeAlias
+from typing import Any, TypeAlias
 
 import numpy as np
 from numpy.typing import NDArray
-from typing import Any
 
+NumericScalar: TypeAlias = int | float
+NumericArray: TypeAlias = NDArray[np.integer[Any] | np.floating[Any]]
 FloatArray: TypeAlias = NDArray[np.floating[Any]]
 BoolArray: TypeAlias = NDArray[np.bool_]

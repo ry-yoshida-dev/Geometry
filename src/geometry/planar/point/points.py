@@ -6,7 +6,7 @@ Shapely polygon access when the collection is interpreted as a boundary.
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
 from typing import Iterator, Union
 
@@ -20,7 +20,7 @@ from .point import Point2D
 
 
 @dataclass
-class Points2D(Point2DBase[FloatArray, Polygon]):
+class Points2D(Point2DBase[NumericArray, Polygon]):
     """
     N points with value of shape (N, 2).
 
@@ -29,7 +29,7 @@ class Points2D(Point2DBase[FloatArray, Polygon]):
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         Shape (N, 2) in pixel coordinates.
     is_convex_hull : bool
         If True, shapely uses the convex hull polygon; otherwise vertices
@@ -57,31 +57,31 @@ class Points2D(Point2DBase[FloatArray, Polygon]):
         self.value = v
 
     @property
-    def x(self) -> FloatArray:
+    def x(self) -> NumericArray:
         """
         All x-coordinates (first column of the value array).
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (N,).
         """
         return self.value[:, 0]
 
     @property
-    def y(self) -> FloatArray:
+    def y(self) -> NumericArray:
         """
         All y-coordinates (second column of the value array).
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (N,).
         """
         return self.value[:, 1]
 
     @property
-    def area(self) -> float:
+    def area(self) -> NumericScalar:
         """
         Area of the polygon returned by shapely (Shapely's signed area).
 
@@ -133,26 +133,26 @@ class Points2D(Point2DBase[FloatArray, Polygon]):
         return Point2D(value=result)
 
     @property
-    def distance_matrix(self) -> FloatArray:
+    def distance_matrix(self) -> NumericArray:
         """
         Get the distance matrix of the points.
 
         Returns
         -------
-        FloatArray: The distance matrix of the points with shape (n, n).
+        NumericArray: The distance matrix of the points with shape (n, n).
         """
         return cdist(self.value, self.value, metric='euclidean')
 
     def append(
         self,
-        coord: Union[FloatArray, tuple[float, float]],
+        coord: Union[NumericArray, tuple[NumericScalar, NumericScalar]],
     ) -> None:
         """
         Append one (x, y) row in place.
 
         Parameters
         ----------
-        coord : FloatArray | tuple[float, float]
+        coord : NumericArray | tuple[float, float]
             Length-2 coordinate in the same dtype as value.
 
         Raises
@@ -201,14 +201,14 @@ class Points2D(Point2DBase[FloatArray, Polygon]):
 
     def __contains__(
         self,
-        coord: Union[FloatArray, tuple[float, float]],
+        coord: Union[NumericArray, tuple[NumericScalar, NumericScalar]],
     ) -> bool:
         """
         Whether coord appears as a row (exact match via in on ndarray).
 
         Parameters
         ----------
-        coord : FloatArray | tuple[float, float]
+        coord : NumericArray | tuple[float, float]
             Candidate (x, y).
 
         Returns
@@ -219,13 +219,13 @@ class Points2D(Point2DBase[FloatArray, Polygon]):
         return coord in self.value
 
     @property
-    def convex_hull_points(self) -> FloatArray:
+    def convex_hull_points(self) -> NumericArray:
         """
         Vertices of the 2D convex hull in SciPy order.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (K, 2) where K is the number of hull vertices.
         """
         convex_hull = ConvexHull(self.value)

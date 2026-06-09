@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ...array_types import FloatArray
+from ...array_types import NumericArray
 import numpy as np
 from dataclasses import dataclass
 
@@ -73,13 +73,13 @@ class Vector2DPair:
         return np.dot(self.vector1.value, self.vector2.value)
 
     @property
-    def cross_product(self) -> FloatArray:
+    def cross_product(self) -> NumericArray:
         """
         Return the cross product of the two vectors.
 
         Returns
         -------
-        FloatArray: The cross product of the two vectors.
+        NumericArray: The cross product of the two vectors.
         """
         return np.cross(self.vector1.value, self.vector2.value)
 

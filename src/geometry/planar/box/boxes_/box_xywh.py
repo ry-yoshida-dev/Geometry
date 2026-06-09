@@ -5,7 +5,7 @@ The value array has length 4: x_min, y_min, width, height in absolute pixel
 coordinates. Width and height must be strictly positive.
 """
 import numpy as np
-from ....array_types import FloatArray
+from ....array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
 
 from ..box import Box2D
@@ -28,7 +28,7 @@ class Box2D_XYWH(Box2D):
 
     Attributes
     ----------
-    value : FloatArray
+    value : NumericArray
         Bounding box as x_min, y_min, width, height.
 
     Raises
@@ -58,7 +58,7 @@ class Box2D_XYWH(Box2D):
         return Box2DFormat.XYWH
 
     @property
-    def width(self) -> float:
+    def width(self) -> NumericScalar:
         """
         Width of the box (horizontal extent).
 
@@ -70,7 +70,7 @@ class Box2D_XYWH(Box2D):
         return self.value[2]
 
     @property
-    def height(self) -> float:
+    def height(self) -> NumericScalar:
         """
         Height of the box (vertical extent).
 
@@ -82,7 +82,7 @@ class Box2D_XYWH(Box2D):
         return self.value[3]
 
     @property
-    def y1(self) -> float:
+    def y1(self) -> NumericScalar:
         """
         Top edge (minimum y) of the box.
 
@@ -94,7 +94,7 @@ class Box2D_XYWH(Box2D):
         return self.value[1]
 
     @property
-    def x1(self) -> float:
+    def x1(self) -> NumericScalar:
         """
         Left edge (minimum x) of the box.
 
@@ -106,7 +106,7 @@ class Box2D_XYWH(Box2D):
         return self.value[0]
 
     @property
-    def x2(self) -> float:
+    def x2(self) -> NumericScalar:
         """
         Right edge: x_min + width.
 
@@ -118,7 +118,7 @@ class Box2D_XYWH(Box2D):
         return self.value[0] + self.value[2]
 
     @property
-    def y2(self) -> float:
+    def y2(self) -> NumericScalar:
         """
         Bottom edge: y_min + height.
 
@@ -130,7 +130,7 @@ class Box2D_XYWH(Box2D):
         return self.value[1] + self.value[3]
 
     @property
-    def y_max(self) -> float:
+    def y_max(self) -> NumericScalar:
         """
         Maximum y-coordinate of the box (same as y2 for XYWH).
 
@@ -142,7 +142,7 @@ class Box2D_XYWH(Box2D):
         return self.y2
 
     @property
-    def area(self) -> float:
+    def area(self) -> NumericScalar:
         """
         Area of the axis-aligned rectangle.
 
@@ -154,13 +154,13 @@ class Box2D_XYWH(Box2D):
         return self.value[2] * self.value[3]
 
     @property
-    def center(self) -> FloatArray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of the bounding box.
 
         Returns
         -------
-        FloatArray
+        NumericArray
             Shape (2,): x_min + w/2, y_min + h/2.
         """
         x_min, y_min, w, h = self.value

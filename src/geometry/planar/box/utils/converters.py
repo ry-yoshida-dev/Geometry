@@ -1,5 +1,5 @@
 import numpy as np
-from ....array_types import FloatArray
+from ....array_types import NumericArray
 
 
 class Box2dConverters:
@@ -18,103 +18,109 @@ class Box2dConverters:
     """
     
     @staticmethod
-    def xywh2xyxy(boxes: FloatArray) -> FloatArray:
+    def xywh2xyxy(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (x1, y1, x2, y2) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in xyxy format with shape (N, 4)
+        NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
         return np.concatenate([x, y, x + w, y + h], axis=-1)
 
     @staticmethod
-    def xywh2uvwh(boxes: FloatArray) -> FloatArray:
+    def xywh2uvwh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (cx, cy, width, height) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in uvwh format with shape (N, 4)
+        NumericArray: Converted boxes in uvwh format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
         return np.concatenate([x + w / 2, y + h / 2, w, h], axis=-1)
 
     @staticmethod
-    def xywh2uvsr(boxes: FloatArray) -> FloatArray:
+    def xywh2uvsr(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (cx, cy, area, aspect_ratio) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in uvsr format with shape (N, 4)
+        NumericArray: Converted boxes in uvsr format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
-        return np.concatenate([x + w / 2, y + h / 2, w * h, w / h], axis=-1)
+        return np.concatenate(
+            [x + w / 2, y + h / 2, w * h, np.divide(w, h, dtype=np.float64)],
+            axis=-1,
+        )
 
     @staticmethod
-    def xywh2uvah(boxes: FloatArray) -> FloatArray:
+    def xywh2uvah(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (cx, cy, aspect_ratio, height) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in uvah format with shape (N, 4)
+        NumericArray: Converted boxes in uvah format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
-        return np.concatenate([x + w / 2, y + h / 2, w / h, h], axis=-1)
+        return np.concatenate(
+            [x + w / 2, y + h / 2, np.divide(w, h, dtype=np.float64), h],
+            axis=-1,
+        )
 
     @staticmethod
-    def xyxy2xywh(boxes: FloatArray) -> FloatArray:
+    def xyxy2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x1, y1, x2, y2) to (x, y, width, height) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in xyxy format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in xywh format with shape (N, 4)
+        NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         x1, y1, x2, y2 = np.split(boxes, 4, axis=-1)
         return np.concatenate([x1, y1, x2 - x1, y2 - y1], axis=-1)
 
     @staticmethod
-    def xyxy2uvsr(boxes: FloatArray) -> FloatArray:
+    def xyxy2uvsr(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x1, y1, x2, y2) to (cx, cy, area, aspect_ratio) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in xyxy format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in uvsr format with shape (N, 4)
+        NumericArray: Converted boxes in uvsr format with shape (N, 4)
         """
         x1, y1, x2, y2 = np.split(boxes, 4, axis=-1)
         cx = (x1 + x2) / 2
@@ -126,89 +132,92 @@ class Box2dConverters:
         return np.concatenate([cx, cy, s, r], axis=-1)
 
     @staticmethod
-    def xyxy2uvah(boxes: FloatArray) -> FloatArray:
+    def xyxy2uvah(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x1, y1, x2, y2) to (cx, cy, aspect_ratio, height) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in xyxy format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in uvah format with shape (N, 4)
+        NumericArray: Converted boxes in uvah format with shape (N, 4)
         """
         x1, y1, x2, y2 = np.split(boxes, 4, axis=-1)
         w, h = x2 - x1, y2 - y1
-        return np.concatenate([(x1 + x2) / 2, (y1 + y2) / 2, w / h, h], axis=-1)
+        return np.concatenate(
+            [(x1 + x2) / 2, (y1 + y2) / 2, np.divide(w, h, dtype=np.float64), h],
+            axis=-1,
+        )
 
     @staticmethod
-    def uvah2xywh(boxes: FloatArray) -> FloatArray:
+    def uvah2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, aspect_ratio, height) to (x, y, width, height) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in uvah format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in xywh format with shape (N, 4)
+        NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         cx, cy, r, h = np.split(boxes, 4, axis=-1)
         w = r * h  # r = w/h, so w = r * h
         return np.concatenate([cx - w / 2, cy - h / 2, w, h], axis=-1)
 
     @staticmethod
-    def uvah2xyxy(boxes: FloatArray) -> FloatArray:
+    def uvah2xyxy(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, aspect_ratio, height) to (x1, y1, x2, y2) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in uvah format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in xyxy format with shape (N, 4)
+        NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
         cx, cy, r, h = np.split(boxes, 4, axis=-1)  # r = w/h
         w = r * h
         return np.concatenate([cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2], axis=-1)
 
     @staticmethod
-    def uvwh2xywh(boxes: FloatArray) -> FloatArray:
+    def uvwh2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, width, height) to (x, y, width, height) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in uvwh format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in xywh format with shape (N, 4)
+        NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         cx, cy, w, h = np.split(boxes, 4, axis=-1)
         return np.concatenate([cx - w / 2, cy - h / 2, w, h], axis=-1)
 
     @staticmethod
-    def uvsr2xywh(boxes: FloatArray) -> FloatArray:
+    def uvsr2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, area, aspect_ratio) to (x, y, width, height) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in uvsr format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in xywh format with shape (N, 4)
+        NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         cx, cy, s, r = np.split(boxes, 4, axis=-1)  # s = w*h, r = w/h
         w = np.sqrt(s * r)  # s * r = wh * w/h = w^2
@@ -216,18 +225,18 @@ class Box2dConverters:
         return np.concatenate([cx - w / 2, cy - h / 2, w, h], axis=-1)
 
     @staticmethod
-    def uvsr2xyxy(boxes: FloatArray) -> FloatArray:
+    def uvsr2xyxy(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, area, aspect_ratio) to (x1, y1, x2, y2) format.
         
         Parameters:
         ----------
-        boxes: FloatArray
+        boxes: NumericArray
             Input boxes in uvsr format with shape (N, 4)
             
         Returns:
         ---------
-        FloatArray: Converted boxes in xyxy format with shape (N, 4)
+        NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
         cx, cy, s, r = np.split(boxes, 4, axis=-1)  # s = w*h, r = w/h
         

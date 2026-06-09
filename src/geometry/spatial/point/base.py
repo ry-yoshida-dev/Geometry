@@ -1,19 +1,19 @@
 """
 Abstract 3D point protocol for scalar or batch storage.
 
-The type parameter T is either float (single coordinate component) or
-FloatArray (per-row components for a batch).
+The type parameter T is either NumericScalar (single coordinate component) or
+NumericArray (per-row components for a batch).
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray
+from ...array_types import NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", float, FloatArray)
+T = TypeVar("T", NumericScalar, NumericArray)
 
 
 @dataclass
@@ -25,7 +25,7 @@ class Point3D(ABC, Generic[T]):
     A batch has shape (N, 3): one row per point.
     """
 
-    value: FloatArray
+    value: NumericArray
 
     @property
     @abstractmethod
