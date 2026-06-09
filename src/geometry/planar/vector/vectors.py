@@ -5,7 +5,7 @@ Validates shape (N, 2) and provides per-row components and Euclidean norms.
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 from dataclasses import dataclass
 from typing import Iterator, Union
 
@@ -16,7 +16,7 @@ from .vector import Vector2D
 
 
 @dataclass
-class Vectors2D(Vector2DBase[NumericArray]):
+class Vectors2D(Vector2DBase[FloatArray]):
     """
     N displacement vectors with value of shape (N, 2).
 
@@ -24,7 +24,7 @@ class Vectors2D(Vector2DBase[NumericArray]):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         Shape (N, 2).
     """
 
@@ -45,37 +45,37 @@ class Vectors2D(Vector2DBase[NumericArray]):
         self.value = v
 
     @property
-    def x(self) -> NumericArray:
+    def x(self) -> FloatArray:
         """
         All x-components (first column).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,).
         """
         return self.value[:, 0]
 
     @property
-    def y(self) -> NumericArray:
+    def y(self) -> FloatArray:
         """
         All y-components (second column).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,).
         """
         return self.value[:, 1]
 
     @property
-    def norm(self) -> NumericArray:
+    def norm(self) -> FloatArray:
         """
         Euclidean length of each row.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,).
         """
         return np.linalg.norm(self.value, axis=1)

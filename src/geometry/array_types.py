@@ -10,7 +10,5 @@ from typing import TypeAlias
 import numpy as np
 from numpy.typing import NDArray
 
-NumericArray: TypeAlias = NDArray[np.number]
 FloatArray: TypeAlias = NDArray[np.floating]
-IntArray: TypeAlias = NDArray[np.integer]
 BoolArray: TypeAlias = NDArray[np.bool_]

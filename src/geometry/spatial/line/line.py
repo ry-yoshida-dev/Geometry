@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 import numpy as np
 from dataclasses import dataclass
 
@@ -10,7 +10,7 @@ from .base import Line3D as Line3DBase
 
 @dataclass
 class Line3D(Line3DBase[float]):
-    value: NumericArray
+    value: FloatArray
 
     def __post_init__(self):
         if self.value.shape != (2, 3):

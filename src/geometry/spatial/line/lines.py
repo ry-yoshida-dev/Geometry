@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 from dataclasses import dataclass
 from typing import Union
 
@@ -13,8 +13,8 @@ from .line import Line3D
 
 
 @dataclass
-class Lines3D(Line3DBase[NumericArray]):
-    value: NumericArray
+class Lines3D(Line3DBase[FloatArray]):
+    value: FloatArray
 
     def __post_init__(self) -> None:
         v = np.asarray(self.value)
@@ -31,7 +31,7 @@ class Lines3D(Line3DBase[NumericArray]):
         return Points3D(value=self.value[:, 1, :])
 
     @property
-    def length(self) -> NumericArray:
+    def length(self) -> FloatArray:
         d = self.value[:, 1, :] - self.value[:, 0, :]
         return np.linalg.norm(d, axis=1)
 

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ...array_types import FloatArray, NumericArray
+from ...array_types import FloatArray
 from dataclasses import dataclass
 import numpy as np
 from typing import Iterator, Union
@@ -9,8 +9,8 @@ from .base import Point3D as Point3DBase
 from .point import Point3D
 
 @dataclass
-class Points3D(Point3DBase[NumericArray]):
-    value: NumericArray
+class Points3D(Point3DBase[FloatArray]):
+    value: FloatArray
 
     def __post_init__(self):
         if self.value.ndim != 2:
@@ -19,15 +19,15 @@ class Points3D(Point3DBase[NumericArray]):
             raise ValueError(f"value must have 3 columns, got shape {self.value.shape}")
 
     @property
-    def x(self) -> NumericArray:
+    def x(self) -> FloatArray:
         return self.value[:, 0]
     
     @property
-    def y(self) -> NumericArray:
+    def y(self) -> FloatArray:
         return self.value[:, 1]
 
     @property
-    def z(self) -> NumericArray:
+    def z(self) -> FloatArray:
         return self.value[:, 2]
 
     @property
@@ -37,7 +37,7 @@ class Points3D(Point3DBase[NumericArray]):
 
         Returns
         -------
-        NumericArray: The distance matrix of the points with shape (n, n).
+        FloatArray: The distance matrix of the points with shape (n, n).
         """
         return cdist(self.value, self.value, metric='euclidean')
 

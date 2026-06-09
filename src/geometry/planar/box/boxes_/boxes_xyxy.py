@@ -5,7 +5,7 @@ Each row has length 4: x1, y1, x2, y2 in absolute pixel coordinates.
 For every box, x1 must be strictly less than x2 and y1 strictly less than y2.
 """
 import numpy as np
-from ....array_types import NumericArray
+from ....array_types import FloatArray
 from dataclasses import dataclass
 
 from ..boxes import Boxes2D
@@ -28,7 +28,7 @@ class Boxes2D_XYXY(Boxes2D):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         Bounding boxes as x1, y1, x2, y2 per row.
 
     Raises
@@ -57,97 +57,97 @@ class Boxes2D_XYXY(Boxes2D):
         return Box2DFormat.XYXY
 
     @property
-    def width(self) -> NumericArray:
+    def width(self) -> FloatArray:
         """
         Width of each box (horizontal extent).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — x2 minus x1 per row.
         """
         return self.value[:, 2] - self.value[:, 0]
 
     @property
-    def height(self) -> NumericArray:
+    def height(self) -> FloatArray:
         """
         Height of each box (vertical extent).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — y2 minus y1 per row.
         """
         return self.value[:, 3] - self.value[:, 1]
 
     @property
-    def x1(self) -> NumericArray:
+    def x1(self) -> FloatArray:
         """
         Left edge (minimum x) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — column 0 of value.
         """
         return self.value[:, 0]
 
     @property
-    def y1(self) -> NumericArray:
+    def y1(self) -> FloatArray:
         """
         Top edge (minimum y) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — column 1 of value.
         """
         return self.value[:, 1]
 
     @property
-    def x2(self) -> NumericArray:
+    def x2(self) -> FloatArray:
         """
         Right edge (maximum x) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — column 2 of value.
         """
         return self.value[:, 2]
 
     @property
-    def y2(self) -> NumericArray:
+    def y2(self) -> FloatArray:
         """
         Bottom edge (maximum y) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — column 3 of value.
         """
         return self.value[:, 3]
 
     @property
-    def y_max(self) -> NumericArray:
+    def y_max(self) -> FloatArray:
         """
         Maximum y-coordinate of each box (same as y2 for XYXY).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — bottom y per box.
         """
         return self.value[:, 3]
 
     @property
-    def area(self) -> NumericArray:
+    def area(self) -> FloatArray:
         """
         Area of each axis-aligned rectangle.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) — (x2 - x1) times (y2 - y1) per row.
         """
         return (self.value[:, 2] - self.value[:, 0]) * (
@@ -155,13 +155,13 @@ class Boxes2D_XYXY(Boxes2D):
         )
 
     @property
-    def center(self) -> NumericArray:
+    def center(self) -> FloatArray:
         """
         Center (cx, cy) of each bounding box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N, 2): midpoint of the diagonal per row.
         """
         x_min, y_min, x_max, y_max = (

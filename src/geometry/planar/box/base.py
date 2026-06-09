@@ -1,11 +1,11 @@
 """
 Abstract 2D bounding box protocol for scalar or vector coordinate fields.
 
-T is either float (single box) or NumericArray (batch).
+T is either float (single box) or FloatArray (batch).
 Coordinates are always absolute pixel values in image space (x right, y down).
 """
 from __future__ import annotations
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 import numpy as np
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -14,7 +14,7 @@ from typing import Generic, TypeVar
 from .format import Box2DFormat
 from .utils import Box2dConverter
 
-T = TypeVar('T', float, NumericArray)
+T = TypeVar('T', float, FloatArray)
 CropSliceT = TypeVar(
     'CropSliceT',
     tuple[slice, slice],
@@ -31,10 +31,10 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         For a single box, shape (4,); for a batch, shape (N, 4).
     """
-    value: NumericArray
+    value: FloatArray
 
     @property
     @abstractmethod
@@ -146,13 +146,13 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     @property
     @abstractmethod
-    def center(self) -> NumericArray:
+    def center(self) -> FloatArray:
         """
         Center (cx, cy) of the box or each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             For a batch, typically shape (N, 2).
         """
 
@@ -174,7 +174,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     def to_format(
         self, 
         target_format: Box2DFormat, 
-        ) -> NumericArray:
+        ) -> FloatArray:
         """
         Convert stored coordinates to another layout.
 
@@ -185,7 +185,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Same leading shape as value with last dimension 4.
         """
         return Box2dConverter.convert_format(
@@ -227,18 +227,18 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     @abstractmethod
     def register(
         cls, 
-        value: NumericArray, 
+        value: FloatArray, 
         box2d_format: Box2DFormat
         ) -> (
             Box2D[float, tuple[slice, slice]]
-            | Box2D[NumericArray, list[tuple[slice, slice]]]
+            | Box2D[FloatArray, list[tuple[slice, slice]]]
         ):
         """
         Construct a concrete subclass from raw array data.
 
         Parameters
         ----------
-        value : NumericArray
+        value : FloatArray
             Coordinate array; shape (4,) or (N, 4) depending on subclass.
         box2d_format : Box2DFormat
             Layout of value (XYXY, XYWH, or aliases).

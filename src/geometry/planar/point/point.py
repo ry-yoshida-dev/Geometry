@@ -7,7 +7,7 @@ Vector2D for displacement between points.
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 import numpy as np
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -29,7 +29,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         Shape (2,). Index 0 is x, index 1 is y.
     """
 
@@ -50,13 +50,13 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
             )
 
     @property
-    def array(self) -> NumericArray:
+    def array(self) -> FloatArray:
         """
         A copy of the underlying coordinate vector.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (2,); modifying the copy does not affect this point.
         """
         return self.value.copy()
@@ -124,7 +124,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
     def __repr__(self) -> str:
         return f"Point2D(x={self.x}, y={self.y})"
 
-    def __add__(self, other: Point2D) -> NumericArray:
+    def __add__(self, other: Point2D) -> FloatArray:
         """
         Element-wise sum of coordinate vectors (returns a raw ndarray).
 
@@ -135,7 +135,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (2,); sum of the two value arrays.
         """
         return self.value + other.value
@@ -158,7 +158,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
         return Vector2D(value=self.value - other.value)
 
-    def __mul__(self, other: float) -> NumericArray:
+    def __mul__(self, other: float) -> FloatArray:
         """
         Scale coordinates by a scalar (returns a raw ndarray).
 
@@ -169,7 +169,7 @@ class Point2D(Point2DBase[float, ShapelyPoint]):
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (2,); scaled coordinates.
         """
         return self.value * other

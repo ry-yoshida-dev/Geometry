@@ -2,12 +2,12 @@
 Abstract 2D point protocol for scalar or batch storage.
 
 The type parameter T is either float (single coordinate component) or
-NumericArray (per-row components for a batch). Coordinates follow image space
+FloatArray (per-row components for a batch). Coordinates follow image space
 (x right, y down).
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
@@ -15,7 +15,7 @@ from typing import Generic, TypeVar
 import numpy as np
 from shapely.geometry.base import BaseGeometry
 
-T = TypeVar("T", float, NumericArray)
+T = TypeVar("T", float, FloatArray)
 G = TypeVar("G", bound=BaseGeometry)
 
 
@@ -29,11 +29,11 @@ class Point2D(ABC, Generic[T, G]):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         One point: shape (2,). A batch: shape (N, 2).
     """
 
-    value: NumericArray
+    value: FloatArray
 
     @property
     @abstractmethod

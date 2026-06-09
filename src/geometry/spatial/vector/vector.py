@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 import numpy as np
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -12,7 +12,7 @@ from .base import Vector3D as Vector3DBase
 
 @dataclass
 class Vector3D(Vector3DBase[float]):
-    value: NumericArray
+    value: FloatArray
 
     def __post_init__(self):
         if self.value.shape != (3,):
@@ -35,7 +35,7 @@ class Vector3D(Vector3DBase[float]):
         return float(np.linalg.norm(self.value))
 
     @property
-    def unit_vector(self) -> NumericArray:
+    def unit_vector(self) -> FloatArray:
         norm = np.linalg.norm(self.value)
         if norm == 0:
             raise ValueError("Cannot compute a unit vector from a zero-length vector.")

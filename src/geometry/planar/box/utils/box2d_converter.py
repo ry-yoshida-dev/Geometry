@@ -1,5 +1,5 @@
 import numpy as np
-from ....array_types import NumericArray
+from ....array_types import FloatArray
 
 from ..format import Box2DFormat
 from .converters import Box2dConverters
@@ -35,10 +35,10 @@ class Box2dConverter:
 
     @staticmethod
     def convert_format(
-        boxes: NumericArray, 
+        boxes: FloatArray, 
         input_format: Box2DFormat, 
         output_format: Box2DFormat, 
-        as_int: bool = False) -> NumericArray:
+        as_int: bool = False) -> FloatArray:
         """
         Convert bounding boxes from one format to another.
         
@@ -48,7 +48,7 @@ class Box2dConverter:
         
         Parameters:
         ----------
-        boxes: NumericArray
+        boxes: FloatArray
             Input bounding boxes with shape (N, 4)
         input_format: Box2DFormat
             Format of input boxes
@@ -59,7 +59,7 @@ class Box2dConverter:
             
         Returns:
         ---------
-        NumericArray: Converted bounding boxes in the specified output format
+        FloatArray: Converted bounding boxes in the specified output format
             
         Raises:
         ---------
@@ -87,7 +87,7 @@ class Box2dConverter:
         return result.astype(np.int32) if as_int else result
 
     @staticmethod
-    def add_dimension(box: NumericArray) -> NumericArray:
+    def add_dimension(box: FloatArray) -> FloatArray:
         """
         Add an extra dimension to the array, converting it to a column vector.
         
@@ -96,16 +96,16 @@ class Box2dConverter:
         
         Parameters:
         ----------
-        box: NumericArray
+        box: FloatArray
             Input array or list
             
         Returns:
         ---------
-        NumericArray: Reshaped array with shape (N, 1)
+        FloatArray: Reshaped array with shape (N, 1)
             
         Returns:
         ---------
-        NumericArray: Reshaped array with shape (N, 1)
+        FloatArray: Reshaped array with shape (N, 1)
             
         Example:
             >>> box = [1, 2, 3, 4]

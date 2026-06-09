@@ -1,19 +1,19 @@
 """
 Abstract 2D line segment protocol (two endpoints) for scalar or batch storage.
 
-The type parameter T is either float (single-segment length) or NumericArray
+The type parameter T is either float (single-segment length) or FloatArray
 (per-row lengths for a batch). Coordinates follow image space (x right, y down).
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", float, NumericArray)
+T = TypeVar("T", float, FloatArray)
 S = TypeVar("S")
 
 
@@ -27,11 +27,11 @@ class Line2D(ABC, Generic[T, S]):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         One segment: shape (2, 2). A batch: shape (N, 2, 2).
     """
 
-    value: NumericArray
+    value: FloatArray
 
     @property
     @abstractmethod

@@ -6,7 +6,7 @@ direction; and helpers for orthogonality, parallelism, and conversion to Line2D.
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -26,7 +26,7 @@ class Vector2D(Vector2DBase[float]):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         Shape (2,). Index 0 is x (horizontal), index 1 is y (vertical).
     """
 
@@ -81,13 +81,13 @@ class Vector2D(Vector2DBase[float]):
         return float(np.linalg.norm(self.value))
 
     @property
-    def unit_vector(self) -> NumericArray:
+    def unit_vector(self) -> FloatArray:
         """
         Unit direction with the same orientation as value.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (2,); value / norm.
 
         Raises

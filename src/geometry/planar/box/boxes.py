@@ -5,7 +5,7 @@ Concrete batched formats (XYXY, XYWH) live in boxes_. This module validates
 shape (N, 4) and provides per-box conversion, cropping, and Shapely access.
 """
 from __future__ import annotations
-from ...array_types import NumericArray
+from ...array_types import FloatArray
 import numpy as np
 from abc import abstractmethod
 from dataclasses import dataclass
@@ -16,7 +16,7 @@ from .format import Box2DFormat
 from .utils import Box2dConverter
 
 @dataclass
-class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
+class Boxes2D(Box2DBase[FloatArray, list[tuple[slice, slice]]]):
     """
     Abstract stack of N bounding boxes with value of shape (N, 4).
 
@@ -25,7 +25,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
 
     Attributes
     ----------
-    value : NumericArray
+    value : FloatArray
         Shape (N, 4); row layout depends on :attr:`box_format`.
     """
 
@@ -59,116 +59,116 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
 
     @property
     @abstractmethod
-    def width(self) -> NumericArray:
+    def width(self) -> FloatArray:
         """
         Width of each box (horizontal extent).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - width in pixels per row.
         """
 
     @property
     @abstractmethod
-    def height(self) -> NumericArray:
+    def height(self) -> FloatArray:
         """
         Height of each box (vertical extent).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - height in pixels per row.
         """
 
     @property
     @abstractmethod
-    def x1(self) -> NumericArray:
+    def x1(self) -> FloatArray:
         """
         Left edge (minimum x) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - minimum x per row.
         """
 
     @property
     @abstractmethod
-    def y1(self) -> NumericArray:
+    def y1(self) -> FloatArray:
         """
         Top edge (minimum y) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - minimum y per row.
         """
 
     @property
     @abstractmethod
-    def x2(self) -> NumericArray:
+    def x2(self) -> FloatArray:
         """
         Right edge (maximum x) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - maximum x per row.
         """
 
     @property
     @abstractmethod
-    def y2(self) -> NumericArray:
+    def y2(self) -> FloatArray:
         """
         Bottom edge (maximum y) of each box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - maximum y per row.
         """
     
     @property
     @abstractmethod
-    def y_max(self) -> NumericArray:
+    def y_max(self) -> FloatArray:
         """
         Maximum y-coordinate of each box (often same as y2).
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - bottom y per box.
         """
 
     @property
     @abstractmethod
-    def area(self) -> NumericArray:
+    def area(self) -> FloatArray:
         """
         Area of each axis-aligned rectangle.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,) - area in square pixels per row.
         """
 
     @property
     @abstractmethod
-    def center(self) -> NumericArray:
+    def center(self) -> FloatArray:
         """
         Center (cx, cy) of each bounding box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N, 2) - centers in pixel coordinates.
         """
 
     def to_format(
         self, 
         target_format: Box2DFormat, 
-        ) -> NumericArray:
+        ) -> FloatArray:
         """
         Convert all rows to another coordinate layout.
 
@@ -179,7 +179,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N, 4) - same boxes in target_format.
         """
         return Box2dConverter.convert_format(
@@ -212,13 +212,13 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         return out
 
     @property
-    def aspect_ratio(self) -> NumericArray:
+    def aspect_ratio(self) -> FloatArray:
         """
         Aspect ratio height / width for each bounding box.
 
         Returns
         -------
-        NumericArray
+        FloatArray
             Shape (N,).
 
         Raises
@@ -260,7 +260,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
     @classmethod
     def register(
         cls, 
-        value: NumericArray, 
+        value: FloatArray, 
         box2d_format: Box2DFormat
         ) -> Boxes2D:
         """
@@ -268,7 +268,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
 
         Parameters
         ----------
-        value : NumericArray
+        value : FloatArray
             Shape (N, 4) - layout depends on box2d_format.
         box2d_format : Box2DFormat
             Row coordinate convention (XYXY, XYWH, or aliases).
