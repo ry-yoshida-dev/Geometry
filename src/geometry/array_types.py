@@ -9,6 +9,7 @@ from typing import TypeAlias
 
 import numpy as np
 from numpy.typing import NDArray
+from typing import Any
 
-FloatArray: TypeAlias = NDArray[np.floating]
+FloatArray: TypeAlias = NDArray[np.floating[Any]]
 BoolArray: TypeAlias = NDArray[np.bool_]
