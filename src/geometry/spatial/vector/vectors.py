@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from ...array_types import NumericArray
 import numpy as np
 from dataclasses import dataclass
 from typing import Iterator
@@ -11,7 +12,7 @@ from units import (
 
 @dataclass
 class Vectors3D:
-    value: np.ndarray
+    value: NumericArray
 
     def __post_init__(self):
         if self.value.ndim != 2:
@@ -20,25 +21,25 @@ class Vectors3D:
             raise ValueError(f"value must have shape (n, 3), got shape {self.value.shape}")
 
     @property
-    def x(self) -> np.ndarray:
+    def x(self) -> NumericArray:
         return self.value[:, 0]
 
     @property
-    def y(self) -> np.ndarray:
+    def y(self) -> NumericArray:
         return self.value[:, 1]
     
     @property
-    def z(self) -> np.ndarray:
+    def z(self) -> NumericArray:
         return self.value[:, 2]
     
     @property
-    def unit_vectors(self) -> np.ndarray:
+    def unit_vectors(self) -> NumericArray:
         """
         Return the unit vectors of the vectors.
         
         Returns
         -------
-        np.ndarray:
+        NumericArray:
             The unit vectors of the vectors in the form of (n, 3).
         """
         norm = np.linalg.norm(self.value, axis=-1, keepdims=True)

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ...array_types import NumericArray
 from dataclasses import dataclass
 import numpy as np
 from typing import TYPE_CHECKING
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class Point3D(Point3DBase[float]):
-    value: np.ndarray
+    value: NumericArray
 
     def __post_init__(self):
         if self.value.shape != (3,):
@@ -28,7 +29,7 @@ class Point3D(Point3DBase[float]):
         return self.value[2]
     
     @property
-    def array(self) -> np.ndarray:
+    def array(self) -> NumericArray:
         return self.value
     
     @property

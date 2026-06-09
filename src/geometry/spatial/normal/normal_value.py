@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ...array_types import FloatArray
 import numpy as np
 from dataclasses import dataclass
 
@@ -11,12 +12,12 @@ class NormalValue:
 
     Parameters
     ----------
-    value: np.ndarray
+    value: FloatArray
         The normal value represented 3D vector in [-1, 1] value range.
     coordinate_system: CartesianCoordinateSystem
         The coordinate system.
     """
-    value: np.ndarray
+    value: FloatArray
     coordinate_system: CartesianCoordinateSystem
 
     def __post_init__(self):

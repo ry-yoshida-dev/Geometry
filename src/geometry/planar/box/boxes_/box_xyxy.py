@@ -5,6 +5,7 @@ The value array has length 4: x1, y1, x2, y2 in absolute pixel coordinates.
 x1 must be strictly less than x2 and y1 strictly less than y2.
 """
 import numpy as np
+from ....array_types import NumericArray
 from dataclasses import dataclass
 
 from ..box import Box2D
@@ -27,7 +28,7 @@ class Box2D_XYXY(Box2D):
 
     Attributes
     ----------
-    value : np.ndarray
+    value : NumericArray
         Bounding box as x1, y1, x2, y2.
 
     Raises
@@ -156,13 +157,13 @@ class Box2D_XYXY(Box2D):
         return (self.value[2] - self.value[0]) * (self.value[3] - self.value[1])
 
     @property
-    def center(self) -> np.ndarray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of the bounding box.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (2,): midpoint of the diagonal between (x1, y1) and (x2, y2).
         """
         x_min, y_min, x_max, y_max = self.value

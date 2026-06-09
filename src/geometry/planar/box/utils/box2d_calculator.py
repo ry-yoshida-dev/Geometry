@@ -1,21 +1,22 @@
 import numpy as np
+from ....array_types import NumericArray
 
 from ..format import Box2DFormat
 
 class BboxCalculator:
     @staticmethod
-    def measure_aspect_ratios(bboxes: np.ndarray) -> np.ndarray:
+    def measure_aspect_ratios(bboxes: NumericArray) -> NumericArray:
         """
         Calculates the aspect ratio (height / width) for each bounding box.
 
         Parameters:
         ----------
-        bboxes : np.ndarray 
+        bboxes : NumericArray 
             Array of shape (N, 4) containing bounding box coordinates in the format [x1, y1, x2, y2].
 
         Returns:
         ----------
-        np.ndarray 
+        NumericArray 
             Array of aspect ratios for each bounding box.
         """
         x1, y1, x2, y2 = bboxes[:, 0], bboxes[:, 1], bboxes[:, 2], bboxes[:, 3] 
@@ -23,18 +24,18 @@ class BboxCalculator:
 
     @staticmethod
     def _compute_intersection_area(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray, 
+        boxes1: NumericArray, 
+        boxes2: NumericArray, 
         is_all_combinations: bool = True
-        ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        ) -> tuple[NumericArray, NumericArray, NumericArray]:
         """
         Compute the intersection area between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
         is_all_combinations: bool
             If True, computes pairwise combinations of bounding boxes from boxes1 and boxes2.
@@ -42,7 +43,7 @@ class BboxCalculator:
 
         Returns:
         ---------
-        tuple[np.ndarray, np.ndarray, np.ndarray]: Intersection area, area of boxes1, and area of boxes2 of shape (N, M).
+        tuple[NumericArray, NumericArray, NumericArray]: Intersection area, area of boxes1, and area of boxes2 of shape (N, M).
         """
         # Extract coordinates of the bounding boxes
         x1_1, y1_1, x2_1, y2_1 = boxes1[:, 0], boxes1[:, 1], boxes1[:, 2], boxes1[:, 3]
@@ -67,22 +68,22 @@ class BboxCalculator:
 
     @staticmethod
     def compute_min_intersection_ratio(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray
-        ) -> np.ndarray:
+        boxes1: NumericArray, 
+        boxes2: NumericArray
+        ) -> NumericArray:
         """
         Compute the minimum intersection ratio between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
 
         Returns:
         ---------
-        np.ndarray: Array of minimum intersection ratios of shape (N, M).
+        NumericArray: Array of minimum intersection ratios of shape (N, M).
         """
         intersection, area1, area2 = BboxCalculator._compute_intersection_area(boxes1, boxes2)
 
@@ -95,25 +96,25 @@ class BboxCalculator:
 
     @staticmethod
     def compute_iou(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray, 
+        boxes1: NumericArray, 
+        boxes2: NumericArray, 
         is_all_combinations: bool = True
-        ) -> np.ndarray:
+        ) -> NumericArray:
         """
         Compute the Intersection over Union (IoU) between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
         is_all_combinations: bool
             If True, computes pairwise IoU calculation, otherwise computes IoU for each bounding box in boxes1 with the corresponding one in boxes2.
 
         Returns:
         ---------
-        np.ndarray: Array of IoU values of shape (N, M).
+        NumericArray: Array of IoU values of shape (N, M).
         """
         intersection, area1, area2 = BboxCalculator._compute_intersection_area(
             boxes1=boxes1, 
@@ -125,41 +126,41 @@ class BboxCalculator:
 
     @staticmethod
     def compute_saiou(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray
-        ) -> np.ndarray:
+        boxes1: NumericArray, 
+        boxes2: NumericArray
+        ) -> NumericArray:
         """
         Compute the soft alignment IoU between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
 
         Returns:
         ---------
-        np.ndarray: Array of soft IoU values of shape (N, M).
+        NumericArray: Array of soft IoU values of shape (N, M).
         """
         iou_matrix = BboxCalculator.compute_iou(boxes1, boxes2)
         return BboxCalculator.compute_saiou_from_iou(iou_matrix)
 
     @staticmethod
     def compute_saiou_from_iou(
-        iou_matrix: np.ndarray
-        ) -> np.ndarray:
+        iou_matrix: NumericArray
+        ) -> NumericArray:
         """
         Compute the soft IoU from the IoU matrix.
 
         Parameters:
         ----------
-        iou_matrix: np.ndarray
+        iou_matrix: NumericArray
             Array of IoU values with shape (N, M).
 
         Returns:
         ---------
-        np.ndarray: Array of soft IoU values of shape (N, M).
+        NumericArray: Array of soft IoU values of shape (N, M).
         """
         sum_pred = np.sum(iou_matrix, axis=0, keepdims=True) # (1, N)
         sum_gt = np.sum(iou_matrix, axis=1, keepdims=True)   # (M, 1)
@@ -169,22 +170,22 @@ class BboxCalculator:
 
     @staticmethod
     def compute_diou(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray
-        ) -> np.ndarray:
+        boxes1: NumericArray, 
+        boxes2: NumericArray
+        ) -> NumericArray:
         """
         Compute the Distance Intersection over Union (DIoU) between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
 
         Returns:
         ---------
-        np.ndarray: Array of DIoU values of shape (N, M).
+        NumericArray: Array of DIoU values of shape (N, M).
         """
         iou = BboxCalculator.compute_iou(
             boxes1=boxes1, 
@@ -208,22 +209,22 @@ class BboxCalculator:
     
     @staticmethod
     def compute_ciou(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray
-        ) -> np.ndarray:
+        boxes1: NumericArray, 
+        boxes2: NumericArray
+        ) -> NumericArray:
         """
         Compute the CIoU between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
 
         Returns:
         ---------
-        np.ndarray: Array of CIoU values of shape (N, M).
+        NumericArray: Array of CIoU values of shape (N, M).
         """
         diou = BboxCalculator.compute_diou(
             boxes1=boxes1, 
@@ -251,22 +252,22 @@ class BboxCalculator:
 
     @staticmethod
     def compute_giou(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray
-        ) -> np.ndarray:
+        boxes1: NumericArray, 
+        boxes2: NumericArray
+        ) -> NumericArray:
         """
         Compute the Generalized Intersection over Union (GIoU) between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
 
         Returns:
         ---------
-        np.ndarray: Array of GIoU values of shape (N, M).
+        NumericArray: Array of GIoU values of shape (N, M).
         """
         intersection, area1, area2 = BboxCalculator._compute_intersection_area(boxes1, boxes2)
         union_area = area1[:, None] + area2 - intersection
@@ -287,22 +288,22 @@ class BboxCalculator:
 
     @staticmethod
     def _apply_buffer(
-        boxes: np.ndarray, 
+        boxes: NumericArray, 
         buffer: float
-        ) -> np.ndarray:
+        ) -> NumericArray:
         """
         Apply a buffer around the bounding boxes.
 
         Parameters:
         ----------
-        boxes: np.ndarray
+        boxes: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
         buffer: float
             Buffer factor to expand the bounding boxes.
 
         Returns:
         ---------
-        np.ndarray: Array of buffered bounding boxes of shape (N, 4).
+        NumericArray: Array of buffered bounding boxes of shape (N, 4).
         """
         boxes = boxes.astype(np.float64)
         w = boxes[:, 2] - boxes[:, 0]
@@ -319,19 +320,19 @@ class BboxCalculator:
 
     @staticmethod
     def compute_biou(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray, 
+        boxes1: NumericArray, 
+        boxes2: NumericArray, 
         buffer: float = 0.1, 
         is_BGIoU_enabled: bool = False
-        ) -> np.ndarray:
+        ) -> NumericArray:
         """
         Compute the buffered Intersection over Union (BIoU) between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
         buffer: float
         is_BGIoU_enabled: bool
@@ -339,7 +340,7 @@ class BboxCalculator:
 
         Returns:
         ---------
-        np.ndarray: Array of buffered IoU values of shape (N, M).
+        NumericArray: Array of buffered IoU values of shape (N, M).
         """
         buffered_boxes1 = BboxCalculator._apply_buffer(boxes1, buffer)
         buffered_boxes2 = BboxCalculator._apply_buffer(boxes2, buffer)
@@ -349,22 +350,22 @@ class BboxCalculator:
 
     @staticmethod
     def compute_soft_biou(
-        boxes1: np.ndarray, 
-        boxes2: np.ndarray, 
-        confidences1: np.ndarray, 
+        boxes1: NumericArray, 
+        boxes2: NumericArray, 
+        confidences1: NumericArray, 
         k1: float = 0.25, 
         k2: float = 0.5
-        ) -> np.ndarray:
+        ) -> NumericArray:
         """
         Compute Soft BIoU between two sets of bounding boxes.
 
         Parameters:
         ----------
-        boxes1: np.ndarray
+        boxes1: NumericArray
             Array of bounding boxes with shape (N, 4) in xyxy format.
-        boxes2: np.ndarray
+        boxes2: NumericArray
             Array of bounding boxes with shape (M, 4) in xyxy format.
-        confidences1: np.ndarray
+        confidences1: NumericArray
             Array of confidence values with shape (N,).
         k1: float
             Expansion scale for bboxes1.
@@ -373,10 +374,10 @@ class BboxCalculator:
 
         Returns:
         ---------
-        np.ndarray: Array of soft BIoU values of shape (N, M).
+        NumericArray: Array of soft BIoU values of shape (N, M).
         """
 
-        def expand_bboxes(bboxes: np.ndarray, confidences: np.ndarray, k: float) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        def expand_bboxes(bboxes: NumericArray, confidences: NumericArray, k: float) -> tuple[NumericArray, NumericArray, NumericArray, NumericArray]:
             w = bboxes[..., 2] - bboxes[..., 0]
             h = bboxes[..., 3] - bboxes[..., 1]
             x1 = bboxes[..., 0] - w * (1 - confidences) * k
@@ -385,7 +386,7 @@ class BboxCalculator:
             y2 = bboxes[..., 3] + h * (1 - confidences) * k
             return x1, y1, x2, y2
 
-        def compute_area(x1: np.ndarray, y1: np.ndarray, x2: np.ndarray, y2: np.ndarray) -> np.ndarray:
+        def compute_area(x1: NumericArray, y1: NumericArray, x2: NumericArray, y2: NumericArray) -> NumericArray:
             return np.maximum(0.0, x2 - x1) * np.maximum(0.0, y2 - y1)
 
         boxes1 = np.expand_dims(boxes1, 1)  # (N, 1, 4)
@@ -411,7 +412,7 @@ class BboxCalculator:
 
     @staticmethod
     def get_box_centers(
-        boxes: np.ndarray, 
+        boxes: NumericArray, 
         box_format: Box2DFormat=Box2DFormat.XYXY
         ):
         """
@@ -419,14 +420,14 @@ class BboxCalculator:
 
         Parameters:
         ----------
-        boxes: np.ndarray
+        boxes: NumericArray
             Array of shape (N, 4) containing bounding boxes.
         box_format: Box2DFormat
             Format of the bounding boxes.
 
         Returns:
         ---------
-        np.ndarray: Array of shape (N, 2) containing the center coordinates.
+        NumericArray: Array of shape (N, 2) containing the center coordinates.
 
         Raises:
             ValueError: If an invalid box format is provided.
@@ -443,25 +444,25 @@ class BboxCalculator:
 
     @staticmethod
     def compute_cdf_from_matrix(
-        matrix: np.ndarray, 
+        matrix: NumericArray, 
         ignore_diagonal: bool = True
-        ) -> tuple[np.ndarray, np.ndarray]:
+        ) -> tuple[NumericArray, NumericArray]:
         """
         Compute cumulative relative frequency distribution (CDF) from a 2D matrix.
 
         Parameters:
         ----------
-        matrix: np.ndarray
+        matrix: NumericArray
             Array of shape (N, M) containing the matrix.
         ignore_diagonal: bool
             If True, diagonal elements are excluded (useful for distance matrices).
 
         Returns:
         ---------
-        tuple[np.ndarray, np.ndarray]: tuple containing the sorted values and the cumulative relative frequencies.
+        tuple[NumericArray, NumericArray]: tuple containing the sorted values and the cumulative relative frequencies.
 
-        - np.ndarray: Array of shape (N, 2) containing the sorted values.
-        - np.ndarray: Array of shape (N, 2) containing the cumulative relative frequencies.
+        - NumericArray: Array of shape (N, 2) containing the sorted values.
+        - NumericArray: Array of shape (N, 2) containing the cumulative relative frequencies.
         """
         values = matrix.flatten()
 

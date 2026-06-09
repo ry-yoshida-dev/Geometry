@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ...array_types import BoolArray, FloatArray
 import numpy as np
 from dataclasses import dataclass
 
@@ -13,14 +14,14 @@ class NormalMap:
     
     Parameters
     ----------
-    value: np.ndarray
+    value: FloatArray
         The normal map represented as a 3D array of shape (height, width, 3).
         Each value is a 3D vector in [-1, 1] value range.
     coordinate_system: CartesianCoordinateSystem
         The coordinate system.
     threshold: float(default=0.9)
     """
-    value: np.ndarray
+    value: FloatArray
     coordinate_system: CartesianCoordinateSystem
     threshold: float = 0.9
 
@@ -41,7 +42,7 @@ class NormalMap:
 
         Parameters
         ----------
-        indices: tuple[np.ndarray, np.ndarray]
+        indices: tuple[int, int]
             The indices to get the normal map at.
 
         Returns
@@ -56,7 +57,7 @@ class NormalMap:
             )
 
     @property
-    def horizontal_plane_mask(self) -> np.ndarray:
+    def horizontal_plane_mask(self) -> BoolArray:
         """
         Get the horizontal plane mask.
         """
@@ -64,7 +65,7 @@ class NormalMap:
         return self.value[:, :, up_index] > self.threshold
 
     @property
-    def vertical_plane_mask(self) -> np.ndarray:
+    def vertical_plane_mask(self) -> BoolArray:
         """
         Get the vertical plane mask.
         """
@@ -73,7 +74,7 @@ class NormalMap:
         return np.abs(self.value[:, :, up_index]) < threshold
 
     @property
-    def zero_one_normal_map(self) -> np.ndarray:
+    def zero_one_normal_map(self) -> FloatArray:
         """
         Get the normal map represented as a 3D array of shape (height, width, 3).
         Each value is a 3D vector in [0, 1] value range.
@@ -83,7 +84,7 @@ class NormalMap:
     @classmethod
     def from_zero_one_normal_map(
         cls,
-        value: np.ndarray,
+        value: FloatArray,
         coordinate_system: CartesianCoordinateSystem
         ) -> NormalMap:
         """
@@ -91,7 +92,7 @@ class NormalMap:
 
         Parameters
         ----------
-        value: np.ndarray
+        value: FloatArray
             The normal map represented as a 3D array of shape (height, width, 3).
             Each value is a 3D vector in [0, 1] value range.
         coordinate_system: CartesianCoordinateSystem

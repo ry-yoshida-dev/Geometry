@@ -7,6 +7,7 @@ LineString and Vector2D for displacement along the segment.
 """
 from __future__ import annotations
 
+from ...array_types import NumericArray
 from dataclasses import dataclass
 
 import numpy as np
@@ -28,7 +29,7 @@ class Line2D(Line2DBase[float, LineString]):
 
     Attributes
     ----------
-    value : np.ndarray
+    value : NumericArray
         Shape (2, 2). Row 0 is (x_start, y_start), row 1 is (x_end, y_end).
     """
 
@@ -131,25 +132,25 @@ class Line2D(Line2DBase[float, LineString]):
         return Points2D(value=np.array([self.start.value, self.end.value]))
 
     @property
-    def x(self) -> np.ndarray:
+    def x(self) -> NumericArray:
         """
         x-coordinates of the start and end points.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Length 2: x_start, then x_end.
         """
         return self.value[:, 0]
 
     @property
-    def y(self) -> np.ndarray:
+    def y(self) -> NumericArray:
         """
         y-coordinates of the start and end points.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Length 2: y_start, then y_end.
         """
         return self.value[:, 1]

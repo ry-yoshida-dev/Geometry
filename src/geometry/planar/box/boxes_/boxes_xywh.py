@@ -5,6 +5,7 @@ Each row has length 4: x_min, y_min, width, height in absolute pixel
 coordinates. Width and height must be strictly positive for every box.
 """
 import numpy as np
+from ....array_types import NumericArray
 from dataclasses import dataclass
 
 from ..boxes import Boxes2D
@@ -27,7 +28,7 @@ class Boxes2D_XYWH(Boxes2D):
 
     Attributes
     ----------
-    value : np.ndarray
+    value : NumericArray
         Bounding boxes as x_min, y_min, width, height per row.
 
     Raises
@@ -56,109 +57,109 @@ class Boxes2D_XYWH(Boxes2D):
         return Box2DFormat.XYWH
 
     @property
-    def width(self) -> np.ndarray:
+    def width(self) -> NumericArray:
         """
         Width of each box (horizontal extent).
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — column 2 of value.
         """
         return self.value[:, 2]
 
     @property
-    def height(self) -> np.ndarray:
+    def height(self) -> NumericArray:
         """
         Height of each box (vertical extent).
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — column 3 of value.
         """
         return self.value[:, 3]
 
     @property
-    def x1(self) -> np.ndarray:
+    def x1(self) -> NumericArray:
         """
         Left edge (minimum x) of each box.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — column 0 of value.
         """
         return self.value[:, 0]
 
     @property
-    def y1(self) -> np.ndarray:
+    def y1(self) -> NumericArray:
         """
         Top edge (minimum y) of each box.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — column 1 of value.
         """
         return self.value[:, 1]
 
     @property
-    def x2(self) -> np.ndarray:
+    def x2(self) -> NumericArray:
         """
         Right edge of each box: x_min + width.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — left x plus width per row.
         """
         return self.value[:, 0] + self.value[:, 2]
 
     @property
-    def y2(self) -> np.ndarray:
+    def y2(self) -> NumericArray:
         """
         Bottom edge of each box: y_min + height.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — top y plus height per row.
         """
         return self.value[:, 1] + self.value[:, 3]
 
     @property
-    def y_max(self) -> np.ndarray:
+    def y_max(self) -> NumericArray:
         """
         Maximum y-coordinate of each box (same as y2 for XYWH).
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — bottom y per box.
         """
         return self.y2
 
     @property
-    def area(self) -> np.ndarray:
+    def area(self) -> NumericArray:
         """
         Area of each axis-aligned rectangle.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N,) — width times height per row.
         """
         return self.value[:, 2] * self.value[:, 3]
 
     @property
-    def center(self) -> np.ndarray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of each bounding box.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (N, 2): x_min + w/2, y_min + h/2 per row.
         """
         x_min = self.value[:, 0]

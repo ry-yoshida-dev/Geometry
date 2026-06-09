@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ...array_types import FloatArray
 import numpy as np
 from dataclasses import dataclass
 
@@ -11,12 +12,12 @@ class PolarCoordinate:
     
     Parameters
     ----------
-    radius: np.ndarray
+    radius: FloatArray
         The radius of the polar coordinate with shape (n,).
     angle: Angle
         The angle of the polar coordinate with shape (n,).
     """
-    radius: np.ndarray
+    radius: FloatArray
     angle: Angle
 
     def __post_init__(self):
@@ -34,62 +35,62 @@ class PolarCoordinate:
             raise ValueError("radius and angle must have the same length")
 
     @property
-    def u(self) -> np.ndarray:
+    def u(self) -> FloatArray:
         """
         The u coordinate.
         
         Returns
         -------
-        np.ndarray:
+        FloatArray:
             The u coordinate
         """
         return self.radius * np.cos(self.radian)
     
     @property
-    def v(self) -> np.ndarray:
+    def v(self) -> FloatArray:
         """
         The v coordinate.
         
         Returns
         -------
-        np.ndarray:
+        FloatArray:
             The v coordinate
         """
         return self.radius * np.sin(self.radian)
 
     @property
-    def uv(self) -> np.ndarray:
+    def uv(self) -> FloatArray:
         """
         The uv coordinate.
         
         Returns
         -------
-        np.ndarray:
+        FloatArray:
             The uv coordinate
         """
         rad = self.radian
         return np.stack([self.radius * np.cos(rad), self.radius * np.sin(rad)], axis=-1)
 
     @property
-    def radian(self) -> np.ndarray:
+    def radian(self) -> FloatArray:
         """
         The angle in radians.
         
         Returns
         -------
-        np.ndarray:
+        FloatArray:
             The angle in radians.
         """
         return self.angle.radian
     
     @property
-    def degree(self) -> np.ndarray:
+    def degree(self) -> FloatArray:
         """
         The angle in degrees.
         
         Returns
         -------
-        np.ndarray:
+        FloatArray:
             The angle in degrees.
         """
         return self.angle.degree
@@ -108,17 +109,17 @@ class PolarCoordinate:
     @classmethod
     def from_uv(
         cls, 
-        u: np.ndarray, 
-        v: np.ndarray
+        u: FloatArray, 
+        v: FloatArray
         ) -> PolarCoordinate:
         """
         Create a polar coordinate from u and v.
         
         Parameters
         ----------
-        u: np.ndarray
+        u: FloatArray
             The u coordinate.
-        v: np.ndarray
+        v: FloatArray
             The v coordinate.
 
         Returns

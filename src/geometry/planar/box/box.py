@@ -6,6 +6,7 @@ validates value with shape (4,) and provides conversion, cropping,
 and geometry helpers.
 """
 from __future__ import annotations
+from ...array_types import NumericArray
 import numpy as np
 from abc import abstractmethod
 from dataclasses import dataclass
@@ -25,7 +26,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     Attributes
     ----------
-    value : np.ndarray
+    value : NumericArray
         Length-4 array; interpretation depends on :attr:`box_format`.
     """
 
@@ -152,20 +153,20 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
     @property
     @abstractmethod
-    def center(self) -> np.ndarray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of the bounding box.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (2,) - center in pixel coordinates.
         """
 
     def to_format(
         self, 
         target_format: Box2DFormat, 
-        ) -> np.ndarray:
+        ) -> NumericArray:
         """
         Convert this box to another coordinate layout.
 
@@ -176,7 +177,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (4,) - same box in target_format.
         """
         return Box2dConverter.convert_format(
@@ -252,7 +253,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
     @classmethod
     def register(
         cls, 
-        value: np.ndarray, 
+        value: NumericArray, 
         box2d_format: Box2DFormat
         ) -> Box2D:
         """
@@ -260,7 +261,7 @@ class Box2D(Box2DBase[float, tuple[slice, slice]]):
 
         Parameters
         ----------
-        value : np.ndarray
+        value : NumericArray
             Shape (4,) - layout depends on box2d_format.
         box2d_format : Box2DFormat
             Input coordinate convention (XYXY, XYWH, or aliases).

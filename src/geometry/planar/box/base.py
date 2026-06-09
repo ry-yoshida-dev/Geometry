@@ -1,10 +1,11 @@
 """
 Abstract 2D bounding box protocol for scalar or vector coordinate fields.
 
-T is either float (single box) or np.ndarray (batch).
+T is either float (single box) or NumericArray (batch).
 Coordinates are always absolute pixel values in image space (x right, y down).
 """
 from __future__ import annotations
+from ...array_types import NumericArray
 import numpy as np
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -13,7 +14,7 @@ from typing import Generic, TypeVar
 from .format import Box2DFormat
 from .utils import Box2dConverter
 
-T = TypeVar('T', float, np.ndarray)
+T = TypeVar('T', float, NumericArray)
 CropSliceT = TypeVar(
     'CropSliceT',
     tuple[slice, slice],
@@ -30,10 +31,10 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     Attributes
     ----------
-    value : np.ndarray
+    value : NumericArray
         For a single box, shape (4,); for a batch, shape (N, 4).
     """
-    value: np.ndarray
+    value: NumericArray
 
     @property
     @abstractmethod
@@ -145,13 +146,13 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
     @property
     @abstractmethod
-    def center(self) -> np.ndarray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of the box or each box.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             For a batch, typically shape (N, 2).
         """
 
@@ -173,7 +174,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     def to_format(
         self, 
         target_format: Box2DFormat, 
-        ) -> np.ndarray:
+        ) -> NumericArray:
         """
         Convert stored coordinates to another layout.
 
@@ -184,7 +185,7 @@ class Box2D(ABC, Generic[T, CropSliceT]):
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Same leading shape as value with last dimension 4.
         """
         return Box2dConverter.convert_format(
@@ -226,18 +227,18 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     @abstractmethod
     def register(
         cls, 
-        value: np.ndarray, 
+        value: NumericArray, 
         box2d_format: Box2DFormat
         ) -> (
             Box2D[float, tuple[slice, slice]]
-            | Box2D[np.ndarray, list[tuple[slice, slice]]]
+            | Box2D[NumericArray, list[tuple[slice, slice]]]
         ):
         """
         Construct a concrete subclass from raw array data.
 
         Parameters
         ----------
-        value : np.ndarray
+        value : NumericArray
             Coordinate array; shape (4,) or (N, 4) depending on subclass.
         box2d_format : Box2DFormat
             Layout of value (XYXY, XYWH, or aliases).

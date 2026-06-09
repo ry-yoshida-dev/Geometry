@@ -5,6 +5,7 @@ The value array has length 4: x_min, y_min, width, height in absolute pixel
 coordinates. Width and height must be strictly positive.
 """
 import numpy as np
+from ....array_types import NumericArray
 from dataclasses import dataclass
 
 from ..box import Box2D
@@ -27,7 +28,7 @@ class Box2D_XYWH(Box2D):
 
     Attributes
     ----------
-    value : np.ndarray
+    value : NumericArray
         Bounding box as x_min, y_min, width, height.
 
     Raises
@@ -153,13 +154,13 @@ class Box2D_XYWH(Box2D):
         return self.value[2] * self.value[3]
 
     @property
-    def center(self) -> np.ndarray:
+    def center(self) -> NumericArray:
         """
         Center (cx, cy) of the bounding box.
 
         Returns
         -------
-        np.ndarray
+        NumericArray
             Shape (2,): x_min + w/2, y_min + h/2.
         """
         x_min, y_min, w, h = self.value
