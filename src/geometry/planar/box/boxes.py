@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from shapely.geometry import Polygon
 
 from .base import Box2D as Box2DBase
+from .box import Box2D
 from .format import Box2DFormat
 from .utils import Box2dConverter
 
@@ -248,6 +249,36 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
                 Polygon([(x1, y1), (x2, y1), (x2, y2), (x1, y2)])
             )
         return polys
+
+    def __len__(self) -> int:
+        """
+        Number of bounding boxes in the batch.
+
+        Returns
+        -------
+        int
+            Row count N of :attr:`value`.
+        """
+        return self.value.shape[0]
+
+    def __getitem__(self, index: int | slice) -> Box2D | Boxes2D:
+        """
+        Index or slice rows of the batch.
+
+        Parameters
+        ----------
+        index : int | slice
+            Row index for one :class:`Box2D`, or slice for a sub-batch.
+
+        Returns
+        -------
+        Box2D | Boxes2D
+            One box or a new batch of the same concrete subclass.
+        """
+        result = self.value[index]
+        if isinstance(index, slice):
+            return type(self)(value=result)
+        return Box2D.register(value=result, box2d_format=self.box_format)
 
     def __repr__(self) -> str:
         cls_name = self.__class__.__name__
