@@ -23,7 +23,7 @@ class BboxCalculator:
         return np.divide(y2 - y1, x2 - x1, dtype=np.float64)
 
     @staticmethod
-    def _compute_intersection_area(
+    def compute_intersection_area(
         boxes1: NumericArray, 
         boxes2: NumericArray, 
         is_all_combinations: bool = True
@@ -85,7 +85,7 @@ class BboxCalculator:
         ---------
         NumericArray: Array of minimum intersection ratios of shape (N, M).
         """
-        intersection, area1, area2 = BboxCalculator._compute_intersection_area(boxes1, boxes2)
+        intersection, area1, area2 = BboxCalculator.compute_intersection_area(boxes1, boxes2)
 
         area1 = area1[:, None]
         area2 = area2[None, :]
@@ -116,7 +116,7 @@ class BboxCalculator:
         ---------
         NumericArray: Array of IoU values of shape (N, M).
         """
-        intersection, area1, area2 = BboxCalculator._compute_intersection_area(
+        intersection, area1, area2 = BboxCalculator.compute_intersection_area(
             boxes1=boxes1, 
             boxes2=boxes2, 
             is_all_combinations=is_all_combinations
@@ -269,7 +269,7 @@ class BboxCalculator:
         ---------
         NumericArray: Array of GIoU values of shape (N, M).
         """
-        intersection, area1, area2 = BboxCalculator._compute_intersection_area(boxes1, boxes2)
+        intersection, area1, area2 = BboxCalculator.compute_intersection_area(boxes1, boxes2)
         union_area = area1[:, None] + area2 - intersection
         iou = intersection / np.maximum(union_area, 1e-7)
 
