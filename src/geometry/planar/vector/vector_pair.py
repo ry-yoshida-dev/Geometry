@@ -5,7 +5,6 @@ from dataclasses import dataclass
 import numpy as np
 from units import Angle, AngleUnit
 
-from ...array_types import NumericArray
 from .vector import Vector2D
 
 
@@ -60,7 +59,7 @@ class Vector2DPair:
         cos_theta = np.clip(np.dot(u1, u2), -1.0, 1.0)
         theta = np.arccos(cos_theta)
         return Angle(
-            value=theta,
+            value=np.array([theta]),
             unit=AngleUnit.RADIAN
             )
 
@@ -76,15 +75,15 @@ class Vector2DPair:
         return float(np.dot(self.vector1.value, self.vector2.value))
 
     @property
-    def cross_product(self) -> NumericArray:
+    def cross_product(self) -> float:
         """
-        Return the cross product of the two vectors.
+        Return the scalar 2D cross product of the two vectors.
 
         Returns
         -------
-        NumericArray: The cross product of the two vectors.
+        float: The z-component of vector1 x vector2.
         """
-        return np.cross(self.vector1.value, self.vector2.value)
+        return self.vector1.cross(self.vector2)
 
 
 

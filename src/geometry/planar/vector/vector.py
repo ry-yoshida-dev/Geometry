@@ -125,6 +125,22 @@ class Vector2D(Vector2DBase[NumericScalar]):
         """
         return bool(np.isclose(np.dot(self.value, other_vector.value), 0.0, atol=atol))
 
+    def cross(self, other_vector: Vector2D) -> float:
+        """
+        Scalar 2D cross product (z-component of the 3D cross product).
+
+        Parameters
+        ----------
+        other_vector : Vector2D
+            Second operand.
+
+        Returns
+        -------
+        float
+            self.x * other.y - self.y * other.x.
+        """
+        return float(self.value[0] * other_vector.value[1] - self.value[1] * other_vector.value[0])
+
     def is_parallel(
         self,
         other_vector: Vector2D,
@@ -145,7 +161,7 @@ class Vector2D(Vector2DBase[NumericScalar]):
         bool
             True if the 2D cross product is close to zero.
         """
-        return bool(np.allclose(np.cross(self.value, other_vector.value), 0.0, atol=atol))
+        return bool(np.isclose(self.cross(other_vector), 0.0, atol=atol))
 
     @classmethod
     def from_two_points(
