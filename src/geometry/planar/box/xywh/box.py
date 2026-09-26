@@ -4,10 +4,11 @@ Single bounding box in XYWH (top-left + size) format.
 The value array has length 4: x_min, y_min, width, height in absolute pixel
 coordinates. Width and height must be strictly positive.
 """
-import numpy as np
-from ....array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
 
+import numpy as np
+
+from ....array_types import NumericArray, NumericScalar
 from ..box import Box2D
 from ..format import Box2DFormat
 
@@ -37,8 +38,7 @@ class Box2D_XYWH(Box2D):
         If width <= 0 or height <= 0 after construction.
     """
 
-    def __post_init__(self):
-        # Base class checks shape (4,); here we require positive width and height.
+    def __post_init__(self) -> None:
         super().__post_init__()
         if self.width <= 0 or self.height <= 0:
             raise ValueError(
@@ -67,7 +67,7 @@ class Box2D_XYWH(Box2D):
         float
             Index 2 of value — width in pixels.
         """
-        return self.value[2]
+        return self._component(2)
 
     @property
     def height(self) -> NumericScalar:
@@ -79,7 +79,7 @@ class Box2D_XYWH(Box2D):
         float
             Index 3 of value — height in pixels.
         """
-        return self.value[3]
+        return self._component(3)
 
     @property
     def y1(self) -> NumericScalar:
@@ -91,7 +91,7 @@ class Box2D_XYWH(Box2D):
         float
             Index 1 of value — top y in pixel coordinates.
         """
-        return self.value[1]
+        return self._component(1)
 
     @property
     def x1(self) -> NumericScalar:
@@ -103,7 +103,7 @@ class Box2D_XYWH(Box2D):
         float
             Index 0 of value — left x in pixel coordinates.
         """
-        return self.value[0]
+        return self._component(0)
 
     @property
     def x2(self) -> NumericScalar:
@@ -115,7 +115,7 @@ class Box2D_XYWH(Box2D):
         float
             Sum of left x and width.
         """
-        return self.value[0] + self.value[2]
+        return self.x1 + self.width
 
     @property
     def y2(self) -> NumericScalar:
@@ -127,7 +127,7 @@ class Box2D_XYWH(Box2D):
         float
             Sum of top y and height.
         """
-        return self.value[1] + self.value[3]
+        return self.y1 + self.height
 
     @property
     def y_max(self) -> NumericScalar:
@@ -151,7 +151,7 @@ class Box2D_XYWH(Box2D):
         float
             width times height.
         """
-        return self.value[2] * self.value[3]
+        return self.width * self.height
 
     @property
     def center(self) -> NumericArray:

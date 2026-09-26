@@ -5,12 +5,13 @@ Validates shape (N, 2) and provides per-row components and Euclidean norms.
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray, NumericArray
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Iterator, Union
+from typing import cast
 
 import numpy as np
 
+from ...array_types import FloatArray, NumericArray
 from .base import Vector2D as Vector2DBase
 from .vector import Vector2D
 
@@ -78,7 +79,7 @@ class Vectors2D(Vector2DBase[NumericArray]):
         FloatArray
             Shape (N,).
         """
-        return np.linalg.norm(self.value, axis=1)
+        return cast(FloatArray, np.linalg.norm(self.value, axis=1))
 
     def __repr__(self) -> str:
         return f"Vectors2D(n={len(self)}, shape={self.value.shape})"
@@ -88,8 +89,8 @@ class Vectors2D(Vector2DBase[NumericArray]):
 
     def __getitem__(
         self,
-        index: Union[int, slice],
-    ) -> Union[Vector2D, "Vectors2D"]:
+        index: int | slice,
+    ) -> Vector2D | Vectors2D:
         """
         Index or slice rows.
 

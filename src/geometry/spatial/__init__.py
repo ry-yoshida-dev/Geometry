@@ -1,47 +1,48 @@
-from .coordinate_type import CoordinateType
 from cartesian_axis import (
-    Axis, 
+    Axis,
     AxisName,
-    AxisOrientation, 
-    CoordinateHandedness, 
-    CartesianCoordinateSystem, 
+    AxisOrientation,
+    CartesianCoordinateSystem,
+    CoordinateHandedness,
     SoftwareCoordinateSystem,
-    )
-from .point import (
-    Point3D, 
-    Points3D, 
-    )
+)
+
+from .coordinate_type import CoordinateType
 from .line import (
     Line3D,
     Lines3D,
-    )
-from .vector import (
-    Vector3D,
-    Vectors3D,
-    Vector3DPair,
-    OrthonormalBasis,
-    )
+)
 from .normal import (
     NormalMap,
     NormalValue,
-    )
-    
+)
+from .point import (
+    Point3D,
+    Points3D,
+)
+from .vector import (
+    OrthonormalBasis,
+    Vector3D,
+    Vector3DPair,
+    Vectors3D,
+)
+
 __all__ = [
-    "CoordinateType", 
     "Axis",
-    "AxisOrientation",
     "AxisName",
-    "CoordinateHandedness",
+    "AxisOrientation",
     "CartesianCoordinateSystem",
-    "SoftwareCoordinateSystem",
-    "Point3D",
-    "Points3D",
+    "CoordinateHandedness",
+    "CoordinateType",
     "Line3D",
     "Lines3D",
-    "Vector3D",
-    "Vectors3D",
-    "Vector3DPair",
-    "OrthonormalBasis",
     "NormalMap",
     "NormalValue",
+    "OrthonormalBasis",
+    "Point3D",
+    "Points3D",
+    "SoftwareCoordinateSystem",
+    "Vector3D",
+    "Vector3DPair",
+    "Vectors3D",
     ]

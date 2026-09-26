@@ -6,12 +6,12 @@ direction; and helpers for orthogonality, parallelism, and conversion to Line2D.
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import numpy as np
 
+from ...array_types import NumericArray, NumericScalar
 from ..point import Point2D
 from .base import Vector2D as Vector2DBase
 
@@ -54,7 +54,7 @@ class Vector2D(Vector2DBase[NumericScalar]):
         float
             dx in coordinate units.
         """
-        return self.value[0].item()
+        return cast(NumericScalar, self.value[0].item())
 
     @property
     def y(self) -> NumericScalar:
@@ -66,7 +66,7 @@ class Vector2D(Vector2DBase[NumericScalar]):
         float
             dy in coordinate units.
         """
-        return self.value[1].item()
+        return cast(NumericScalar, self.value[1].item())
 
     @property
     def norm(self) -> float:
@@ -98,7 +98,7 @@ class Vector2D(Vector2DBase[NumericScalar]):
         n = self.norm
         if n == 0:
             raise ValueError("Cannot compute a unit vector from a zero-length vector.")
-        return self.value / n
+        return cast(NumericArray, self.value / n)
 
     def __repr__(self) -> str:
         return f"Vector2D(x={self.x}, y={self.y})"

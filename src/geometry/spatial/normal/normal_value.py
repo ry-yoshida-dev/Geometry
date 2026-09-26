@@ -1,9 +1,11 @@
 from __future__ import annotations
-from ...array_types import FloatArray
-import numpy as np
+
 from dataclasses import dataclass
 
 from cartesian_axis import CartesianCoordinateSystem
+
+from ...array_types import FloatArray
+
 
 @dataclass
 class NormalValue:
@@ -20,7 +22,7 @@ class NormalValue:
     value: FloatArray
     coordinate_system: CartesianCoordinateSystem
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.value.shape != (3,):
             raise ValueError(f"Normal value must have shape (3,), got {self.value.shape}")
         if self.value.min() < -1 or self.value.max() > 1:

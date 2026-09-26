@@ -10,9 +10,11 @@ authors = [
 ]
 description = "2D/3D geometry primitives and utilities (points, lines, vectors, boxes, coordinates)."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
@@ -26,6 +28,14 @@ dependencies = [
     "handedness-rotation @ git+https://github.com/ry-yoshida-dev/HandednessRotation.git",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "pytest",
+    "scipy-stubs",
+    "types-shapely",
+]
+
 [project.urls]
 Homepage = "https://github.com/ry-yoshida-dev/Geometry"
 "Bug Tracker" = "https://github.com/ry-yoshida-dev/Geometry/issues"
@@ -35,3 +45,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 geometry = ["py.typed"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -7,18 +7,16 @@ NumericArray (per-row values for a batch). Components follow image space
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray, NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", NumericScalar, NumericArray)
+from ...array_types import FloatArray, NumericArray, NumericScalar
 
 
 @dataclass
-class Vector2D(ABC, Generic[T]):
+class Vector2D[T: (NumericScalar, NumericArray)](ABC):
     """
     Abstract single vector or batch stored as a NumPy array.
 

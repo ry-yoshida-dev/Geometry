@@ -1,20 +1,23 @@
 """
 Single 2D bounding box API extending the abstract base in base.
 
-Concrete formats (XYXY, XYWH) are implemented in boxes_. This module
+Concrete formats are implemented in the xyxy and xywh subpackages. This module
 validates value with shape (4,) and provides conversion, cropping,
 and geometry helpers.
 """
 from __future__ import annotations
-from ...array_types import NumericArray, NumericScalar
-import numpy as np
+
 from abc import abstractmethod
 from dataclasses import dataclass
+
+import numpy as np
 from shapely.geometry import Polygon
 
+from ...array_types import NumericArray, NumericScalar
 from .base import Box2D as Box2DBase
 from .format import Box2DFormat
 from .utils import Box2dConverter
+
 
 @dataclass
 class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
@@ -30,7 +33,7 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         Length-4 array; interpretation depends on :attr:`box_format`.
     """
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """
         Validate shape after initialization.
 
@@ -41,6 +44,34 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         """
         if self.value.shape != (4,):
             raise ValueError(f"box must have shape (4,), but got {self.value.shape}")
+
+    def _component(self, index: int) -> NumericScalar:
+        """
+        Read one entry of value as a Python scalar, preserving int or float.
+
+        Parameters
+        ----------
+        index : int
+            Position in value (0 to 3).
+
+        Returns
+        -------
+        NumericScalar
+            int for integer dtypes, float for floating dtypes.
+
+        Raises
+        ------
+        TypeError
+            If value does not hold an integer or floating dtype.
+        """
+        component: np.generic = self.value[index]
+        match component:
+            case np.integer():
+                return int(component)
+            case np.floating():
+                return float(component)
+            case _:
+                raise TypeError(f"value must hold integers or floats, but got {component.dtype}")
 
     @property
     @abstractmethod
@@ -149,7 +180,6 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         float
             Area in square pixels.
         """
-        pass
 
     @property
     @abstractmethod
@@ -200,10 +230,10 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         tuple[slice, slice]
             (yslice, xslice) from rounded box edges in pixel coordinates.
         """
-        y_min = int(round(self.y1))
-        y_max = int(round(self.y2))
-        x_min = int(round(self.x1))
-        x_max = int(round(self.x2))
+        y_min = round(self.y1)
+        y_max = round(self.y2)
+        x_min = round(self.x1)
+        x_max = round(self.x2)
 
         return (
             slice(y_min, y_max),
@@ -213,21 +243,21 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
     @property
     def aspect_ratio(self) -> float:
         """
-        Aspect ratio height / width of the bounding box.
+        Aspect ratio width / height of the bounding box.
 
         Returns
         -------
         float
-            Height divided by width.
+            Width divided by height.
 
         Raises
         ------
         ZeroDivisionError
-            If width is zero.
+            If height is zero.
         """
-        if self.width == 0:
-            raise ZeroDivisionError("Width of the box is zero, cannot compute aspect ratio.")
-        return float(self.height / self.width)
+        if self.height == 0:
+            raise ZeroDivisionError("Height of the box is zero, cannot compute aspect ratio.")
+        return float(self.width / self.height)
 
     @property
     def shapely(self) -> Polygon:
@@ -273,21 +303,10 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         """
         match box2d_format:
             case Box2DFormat.XYXY | Box2DFormat.TLBR:
-                from .boxes_ import Box2D_XYXY
-                cls_ = Box2D_XYXY
+                from .xyxy import Box2D_XYXY
+                return Box2D_XYXY(value=value)
             case Box2DFormat.XYWH | Box2DFormat.TLWH:
-                from .boxes_ import Box2D_XYWH
-                cls_ = Box2D_XYWH
+                from .xywh import Box2D_XYWH
+                return Box2D_XYWH(value=value)
             case _:
                 raise ValueError(f"Unsupported box format: {box2d_format}")
-        return cls_(value=value)
-
-
-if __name__ == "__main__":
-    value = np.array([100, 100, 200, 200])
-    box2d_format = Box2DFormat.XYXY
-    box2d = Box2D.register(
-        value=value, 
-        box2d_format=box2d_format
-        )
-    print(box2d)

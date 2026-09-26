@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from ...array_types import NumericArray
 from dataclasses import dataclass
-from typing import Union
+from typing import cast
 
 import numpy as np
 
+from ...array_types import NumericArray
 from ..point import Points3D
 from ..vector import Vectors3D
 from .base import Line3D as Line3DBase
@@ -33,7 +33,7 @@ class Lines3D(Line3DBase[NumericArray]):
     @property
     def length(self) -> NumericArray:
         d = self.value[:, 1, :] - self.value[:, 0, :]
-        return np.linalg.norm(d, axis=1)
+        return cast(NumericArray, np.linalg.norm(d, axis=1))
 
     @property
     def center(self) -> Points3D:
@@ -44,9 +44,9 @@ class Lines3D(Line3DBase[NumericArray]):
         return Vectors3D(value=self.value[:, 1, :] - self.value[:, 0, :])
 
     def __len__(self) -> int:
-        return self.value.shape[0]
+        return int(self.value.shape[0])
 
-    def __getitem__(self, index: Union[int, slice]) -> Union[Line3D, "Lines3D"]:
+    def __getitem__(self, index: int | slice) -> Line3D | Lines3D:
         result = self.value[index]
         if isinstance(index, slice):
             return Lines3D(value=result)

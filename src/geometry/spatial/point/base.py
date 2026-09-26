@@ -6,18 +6,16 @@ NumericArray (per-row components for a batch).
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", NumericScalar, NumericArray)
+from ...array_types import NumericArray, NumericScalar
 
 
 @dataclass
-class Point3D(ABC, Generic[T]):
+class Point3D[T: (NumericScalar, NumericArray)](ABC):
     """
     Abstract single point or batch stored as a NumPy array.
 

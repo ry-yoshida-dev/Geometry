@@ -1,10 +1,12 @@
 from __future__ import annotations
-from ...array_types import BoolArray, FloatArray
-import numpy as np
+
 from dataclasses import dataclass
 
-from .normal_value import NormalValue
+import numpy as np
 from cartesian_axis import CartesianCoordinateSystem
+
+from ...array_types import BoolArray, FloatArray
+from .normal_value import NormalValue
 
 
 @dataclass
@@ -25,7 +27,7 @@ class NormalMap:
     coordinate_system: CartesianCoordinateSystem
     threshold: float = 0.9
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.value.ndim != 3:
             raise ValueError(f"Normal map must have 3 dimensions, got {self.value.ndim}")
         if self.value.shape[2] != 3:
@@ -105,7 +107,7 @@ class NormalMap:
         """
         if np.min(value) < 0 or np.max(value) > 1:
             raise ValueError("Zero one normal map must be in [0, 1] value range")
-        normal_map = 2 * value - 1 # convert [0, 1] to [-1, 1] value range
+        normal_map = 2 * value - 1
         normalized_norm = np.linalg.norm(normal_map, axis=2, keepdims=True)
         normalized_norm[normalized_norm < 1e-6] = 1e-6
         return cls(

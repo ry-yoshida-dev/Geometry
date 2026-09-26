@@ -1,6 +1,8 @@
 from __future__ import annotations
+
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Iterator, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .vector import Vector3D
@@ -26,11 +28,11 @@ class OrthonormalBasis:
         - If the vectors are not unit vectors.
         - If the vectors are not orthogonal.
     """
-    e1: "Vector3D"
-    e2: "Vector3D"
-    e3: "Vector3D"
+    e1: Vector3D
+    e2: Vector3D
+    e3: Vector3D
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.e1.is_unit:
             raise ValueError("e1 is not a unit vector")
         if not self.e2.is_unit:
@@ -44,7 +46,7 @@ class OrthonormalBasis:
         if not self.e2.is_orthogonal(self.e3):
             raise ValueError("e2 and e3 are not orthogonal")
 
-    def __getitem__(self, index: int) -> "Vector3D":
+    def __getitem__(self, index: int) -> Vector3D:
         if index not in (-3, -2, -1, 0, 1, 2):
             raise IndexError(f"index {index} out of range")
         return  (self.e1, self.e2, self.e3)[index]
@@ -52,6 +54,6 @@ class OrthonormalBasis:
     def __len__(self) -> int:
         return 3
 
-    def __iter__(self) -> Iterator["Vector3D"]:
+    def __iter__(self) -> Iterator[Vector3D]:
         return iter((self.e1, self.e2, self.e3))
 

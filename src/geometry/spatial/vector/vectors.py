@@ -1,20 +1,21 @@
 from __future__ import annotations
 
-from ...array_types import NumericArray
-import numpy as np
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Iterator
+from typing import cast
+
+import numpy as np
+from units import Angle, AngleUnit
+
+from ...array_types import NumericArray
 from .vector import Vector3D
-from units import (
-    Angle, 
-    AngleUnit
-    )
+
 
 @dataclass
 class Vectors3D:
     value: NumericArray
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.value.ndim != 2:
             raise ValueError(f"value must have shape (n, 3), got shape {self.value.shape}")
         if self.value.shape[1] != 3:
@@ -45,7 +46,7 @@ class Vectors3D:
         norm = np.linalg.norm(self.value, axis=-1, keepdims=True)
         if np.any(norm == 0):
             raise ValueError("Cannot compute a unit vector from a zero-length vector.")
-        return self.value / norm
+        return cast(NumericArray, self.value / norm)
 
     def to_azimuthal_angles(
         self, 
@@ -97,7 +98,7 @@ class Vectors3D:
         if right_index not in [0, 1, 2]:
             raise ValueError(f"Invalid right index: {right_index}")
         if forward_index == right_index:
-            raise ValueError(f"Forward index and right index must be different")
+            raise ValueError("Forward index and right index must be different")
         unit_vectors = self.unit_vectors
         polar_angles = np.arctan2(
             unit_vectors[..., right_index], 

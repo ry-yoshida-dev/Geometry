@@ -1,10 +1,13 @@
 from __future__ import annotations
-from ...array_types import NumericArray
-import numpy as np
+
 from dataclasses import dataclass
 
-from .vector import Vector2D
+import numpy as np
 from units import Angle, AngleUnit
+
+from ...array_types import NumericArray
+from .vector import Vector2D
+
 
 @dataclass
 class Vector2DPair:
@@ -55,9 +58,9 @@ class Vector2DPair:
         u1 = self.vector1.unit_vector
         u2 = self.vector2.unit_vector
         cos_theta = np.clip(np.dot(u1, u2), -1.0, 1.0)
-        theta = np.arccos(cos_theta)        
+        theta = np.arccos(cos_theta)
         return Angle(
-            value=theta, 
+            value=theta,
             unit=AngleUnit.RADIAN
             )
 
@@ -70,7 +73,7 @@ class Vector2DPair:
         -------
         float: The dot product of the two vectors.
         """
-        return np.dot(self.vector1.value, self.vector2.value)
+        return float(np.dot(self.vector1.value, self.vector2.value))
 
     @property
     def cross_product(self) -> NumericArray:

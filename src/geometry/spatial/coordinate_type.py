@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class CoordinateType(Enum):
     """
     CoordinateType is an enum that represents the type of coordinate system.

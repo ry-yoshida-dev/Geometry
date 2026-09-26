@@ -7,12 +7,12 @@ Vector2D for displacement between points.
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray, NumericScalar
-import numpy as np
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
+
 from shapely.geometry import Point as ShapelyPoint
 
+from ...array_types import NumericArray, NumericScalar
 from .base import Point2D as Point2DBase
 
 if TYPE_CHECKING:
@@ -95,7 +95,7 @@ class Point2D(Point2DBase[NumericScalar, ShapelyPoint]):
         float
             x in pixel coordinates.
         """
-        return self.value[0].item()
+        return cast(NumericScalar, self.value[0].item())
 
     @property
     def y(self) -> NumericScalar:
@@ -107,7 +107,7 @@ class Point2D(Point2DBase[NumericScalar, ShapelyPoint]):
         float
             y in pixel coordinates.
         """
-        return self.value[1].item()
+        return cast(NumericScalar, self.value[1].item())
 
     @property
     def shapely(self) -> ShapelyPoint:
@@ -140,7 +140,7 @@ class Point2D(Point2DBase[NumericScalar, ShapelyPoint]):
         """
         return self.value + other.value
 
-    def __sub__(self, other: Point2D) -> "Vector2D":
+    def __sub__(self, other: Point2D) -> Vector2D:
         """
         Displacement from other to self as a 2D vector.
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from enum import Enum
+
 
 class Box2DFormat(Enum):
     """
@@ -13,21 +15,21 @@ class Box2DFormat(Enum):
     TLWH: alias of XYWH
     UVWH: center (u,v) and width/height
     CXCYWH: alias of UVWH
-    UVAH: center (u,v), aspect ratio, height
+    UVAH: center (u,v), aspect ratio (width / height), height
     CXCYAH: alias of UVAH
-    UVSR: center (u,v), scale, rotation
+    UVSR: center (u,v), area (width * height), aspect ratio (width / height)
     CXCYSR: alias of UVSR
     """    
-    XYXY = "xyxy"      # top-left and bottom-right corners
-    TLBR = "tlbr"      # alias of xyxy
-    XYWH = "xywh"      # top-left and width/height
-    TLWH = "tlwh"      # alias of xywh
-    UVWH = "uvwh"      # center (u,v) and width/height
-    CXCYWH = "cxcywh"  # alias of uvwh
-    UVAH = "uvah"      # center (u,v), aspect ratio, height
-    CXCYAH = "cxcyah"  # alias of uvah
-    UVSR = "uvsr"      # center (u,v), scale, rotation
-    CXCYSR = "cxcysr"  # alias of uvsr
+    XYXY = "xyxy"
+    TLBR = "tlbr"
+    XYWH = "xywh"
+    TLWH = "tlwh"
+    UVWH = "uvwh"
+    CXCYWH = "cxcywh"
+    UVAH = "uvah"
+    CXCYAH = "cxcyah"
+    UVSR = "uvsr"
+    CXCYSR = "cxcysr"
 
     @property
     def fields(self) -> tuple[str, str, str, str]:

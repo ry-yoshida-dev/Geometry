@@ -1,6 +1,8 @@
 # box
 
-Axis-aligned 2D bounding boxes in image pixel coordinates (x right, y down). Single-box and batched APIs, XYXY/XYWH implementations under `boxes_/`, and shared helpers in `utils/`.
+## Overview
+
+Axis-aligned 2D bounding boxes in image pixel coordinates (x right, y down). Single-box and batched APIs, concrete XYXY/XYWH implementations in per-format subpackages, and shared helpers in `utils/`.
 
 ## Components
 
@@ -10,7 +12,8 @@ Axis-aligned 2D bounding boxes in image pixel coordinates (x right, y down). Sin
 | [box.py](./box.py) | Single box — `value` shape `(4,)`. |
 | [boxes.py](./boxes.py) | Batch — `value` shape `(N, 4)`. |
 | [format.py](./format.py) | `Box2DFormat` enum. |
-| [boxes_/](./boxes_/README.md) | Concrete XYXY / XYWH classes. |
+| [xyxy/](./xyxy/README.md) | Concrete XYXY classes (`Box2D_XYXY`, `Boxes2D_XYXY`). |
+| [xywh/](./xywh/README.md) | Concrete XYWH classes (`Box2D_XYWH`, `Boxes2D_XYWH`). |
 | [utils/](./utils/README.md) | `BboxCalculator`, `Box2dConverter`, low-level converters. |
 
 ## Examples

@@ -1,18 +1,20 @@
 from __future__ import annotations
-from ...array_types import NumericArray, NumericScalar
-import numpy as np
+
 from dataclasses import dataclass
 
+import numpy as np
 
+from ...array_types import NumericArray
 from ..point import Point3D
 from ..vector import Vector3D
 from .base import Line3D as Line3DBase
+
 
 @dataclass
 class Line3D(Line3DBase[float]):
     value: NumericArray
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.value.shape != (2, 3):
             raise ValueError("value must have shape (2, 3)")
 

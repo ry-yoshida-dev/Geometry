@@ -5,13 +5,13 @@ Validates shape (N, 2, 2) and provides per-segment length, endpoints, and Shapel
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray
 from dataclasses import dataclass
-from typing import Union
+from typing import cast
 
 import numpy as np
 from shapely.geometry import LineString
 
+from ...array_types import NumericArray
 from ..point import Points2D
 from .base import Line2D as Line2DBase
 from .line import Line2D
@@ -81,7 +81,7 @@ class Lines2D(Line2DBase[NumericArray, list[LineString]]):
             Shape (N,): one length per segment.
         """
         d = self.value[:, 1, :] - self.value[:, 0, :]
-        return np.linalg.norm(d, axis=1)
+        return cast(NumericArray, np.linalg.norm(d, axis=1))
 
     @property
     def center(self) -> Points2D:
@@ -126,9 +126,9 @@ class Lines2D(Line2DBase[NumericArray, list[LineString]]):
         return out
 
     def __len__(self) -> int:
-        return self.value.shape[0]
+        return int(self.value.shape[0])
 
-    def __getitem__(self, index: Union[int, slice]) -> Union[Line2D, Lines2D]:
+    def __getitem__(self, index: int | slice) -> Line2D | Lines2D:
         result = self.value[index]
         if isinstance(index, slice):
             return Lines2D(value=result)

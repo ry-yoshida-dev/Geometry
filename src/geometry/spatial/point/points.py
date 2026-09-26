@@ -1,18 +1,21 @@
 from __future__ import annotations
-from ...array_types import NumericArray
+
+from collections.abc import Iterator
 from dataclasses import dataclass
-import numpy as np
-from typing import Iterator, Union
+from typing import cast
+
 from scipy.spatial.distance import cdist
 
+from ...array_types import NumericArray
 from .base import Point3D as Point3DBase
 from .point import Point3D
+
 
 @dataclass
 class Points3D(Point3DBase[NumericArray]):
     value: NumericArray
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.value.ndim != 2:
             raise ValueError(f"value must have shape (n, 3), got shape {self.value.shape}")
         if self.value.shape[1] != 3:
@@ -121,7 +124,7 @@ class Points3D(Point3DBase[NumericArray]):
         -------
         Points3D: The divided points.
         """
-        return Points3D(value=self.value / other)
+        return Points3D(value=cast(NumericArray, self.value / other))
 
     def __repr__(self) -> str:
         return f"Points3D(n={len(self)}, shape={self.value.shape})"
@@ -129,7 +132,7 @@ class Points3D(Point3DBase[NumericArray]):
     def __len__(self) -> int:
         return len(self.value)
     
-    def __getitem__(self, index: Union[int, slice]) -> Union[Point3D, "Points3D"]:
+    def __getitem__(self, index: int | slice) -> Point3D | Points3D:
         result = self.value[index]
         if isinstance(index, slice):
             return Points3D(value=result)

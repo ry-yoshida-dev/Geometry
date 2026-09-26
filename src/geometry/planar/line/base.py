@@ -6,19 +6,16 @@ The type parameter T is either float (single-segment length) or NumericArray
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", float, NumericArray)
-S = TypeVar("S")
+from ...array_types import NumericArray
 
 
 @dataclass
-class Line2D(ABC, Generic[T, S]):
+class Line2D[T: (float, NumericArray), S](ABC):
     """
     Abstract line segment or batch stored as a NumPy array.
 

@@ -6,15 +6,15 @@ Shapely polygon access when the collection is interpreted as a boundary.
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray, NumericScalar
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Iterator, Union
 
 import numpy as np
+from scipy.spatial import ConvexHull
 from scipy.spatial.distance import cdist
-from scipy.spatial import ConvexHull # type: ignore
 from shapely.geometry import Polygon
 
+from ...array_types import NumericArray, NumericScalar
 from .base import Point2D as Point2DBase
 from .point import Point2D
 
@@ -112,8 +112,8 @@ class Points2D(Point2DBase[NumericArray, Polygon]):
 
     def __getitem__(
         self,
-        index: Union[int, slice],
-    ) -> Union[Point2D, "Points2D"]:
+        index: int | slice,
+    ) -> Point2D | Points2D:
         """
         Index or slice rows of the batch.
 
@@ -145,7 +145,7 @@ class Points2D(Point2DBase[NumericArray, Polygon]):
 
     def append(
         self,
-        coord: Union[NumericArray, tuple[NumericScalar, NumericScalar]],
+        coord: NumericArray | tuple[NumericScalar, NumericScalar],
     ) -> None:
         """
         Append one (x, y) row in place.
@@ -201,10 +201,10 @@ class Points2D(Point2DBase[NumericArray, Polygon]):
 
     def __contains__(
         self,
-        coord: Union[NumericArray, tuple[NumericScalar, NumericScalar]],
+        coord: NumericArray | tuple[NumericScalar, NumericScalar],
     ) -> bool:
         """
-        Whether coord appears as a row (exact match via in on ndarray).
+        Whether coord exactly matches at least one row.
 
         Parameters
         ----------
@@ -214,9 +214,17 @@ class Points2D(Point2DBase[NumericArray, Polygon]):
         Returns
         -------
         bool
-            True if a row equals coord under NumPy membership rules.
+            True if both x and y of some row equal coord.
+
+        Raises
+        ------
+        ValueError
+            If coord does not resolve to shape (2,).
         """
-        return coord in self.value
+        candidate = np.asarray(coord)
+        if candidate.shape != (2,):
+            raise ValueError("A coordinate must be a length-2 array or tuple.")
+        return bool(np.any(np.all(self.value == candidate, axis=1)))
 
     @property
     def convex_hull_points(self) -> NumericArray:

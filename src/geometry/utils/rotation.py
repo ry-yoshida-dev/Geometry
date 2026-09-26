@@ -1,18 +1,17 @@
 import numpy as np
-
 from cartesian_axis import CoordinateHandedness
-
 from handedness_rotation import (
-    HandednessRotationMatrix, 
     IntrinsicRotationOrder,
+    RotationMatrix,
 )
+
 
 class GeometryRotationMatrix:
     @staticmethod
     def register_from_x_radian(
         x_radian: float,
         coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> HandednessRotationMatrix:
+        ) -> RotationMatrix:
         """
         Register a rotation matrix for a rotation around the X-axis.
 
@@ -25,7 +24,7 @@ class GeometryRotationMatrix:
 
         Returns
         -------
-        HandednessRotationMatrix
+        RotationMatrix
             Rotation matrix.
         """
         cos = np.cos(x_radian)
@@ -40,7 +39,7 @@ class GeometryRotationMatrix:
                                 [0, cos, sin],
                                 [0, -sin,  cos]])
 
-        return HandednessRotationMatrix(
+        return RotationMatrix(
             value=value, 
             coordinate_handedness=coordinate_system
             )
@@ -49,7 +48,7 @@ class GeometryRotationMatrix:
     def register_from_y_radian(
         y_radian: float,
         coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> HandednessRotationMatrix:
+        ) -> RotationMatrix:
         """
         Register a rotation matrix for a rotation around the Y-axis.
         
@@ -62,7 +61,7 @@ class GeometryRotationMatrix:
 
         Returns
         -------
-        HandednessRotationMatrix
+        RotationMatrix
             Rotation matrix.
         """
         cos = np.cos(y_radian)
@@ -77,7 +76,7 @@ class GeometryRotationMatrix:
                                 [0, 1, 0],
                                 [sin, 0, cos]])
 
-        return HandednessRotationMatrix(
+        return RotationMatrix(
             value=value, 
             coordinate_handedness=coordinate_system
             )
@@ -86,7 +85,7 @@ class GeometryRotationMatrix:
     def register_from_z_radian(
         z_radian: float,
         coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> HandednessRotationMatrix:
+        ) -> RotationMatrix:
         """
         Register a rotation matrix for a rotation around the Z-axis.
         
@@ -99,7 +98,7 @@ class GeometryRotationMatrix:
 
         Returns
         -------
-        HandednessRotationMatrix
+        RotationMatrix
             Rotation matrix.
         """
         cos = np.cos(z_radian)
@@ -113,19 +112,19 @@ class GeometryRotationMatrix:
                 value = np.array([[cos, sin, 0],
                                 [-sin, cos, 0],
                                 [0, 0, 1]])
-        return HandednessRotationMatrix(
+        return RotationMatrix(
             value=value, 
             coordinate_handedness=coordinate_system
             )
 
     @staticmethod
     def from_Rx_Ry_Rz(
-        Rx: HandednessRotationMatrix, 
-        Ry: HandednessRotationMatrix, 
-        Rz: HandednessRotationMatrix, 
+        Rx: RotationMatrix, 
+        Ry: RotationMatrix, 
+        Rz: RotationMatrix, 
         order: IntrinsicRotationOrder = IntrinsicRotationOrder.XYZ,
         coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ):
+        ) -> RotationMatrix:
         """
         Create a composite rotation matrix from individual rotation matrices.
         
@@ -135,11 +134,11 @@ class GeometryRotationMatrix:
 
         Parameters
         ----------
-        Rx : HandednessRotationMatrix
+        Rx : RotationMatrix
             Rotation around the X-axis.
-        Ry : HandednessRotationMatrix
+        Ry : RotationMatrix
             Rotation around the Y-axis.
-        Rz : HandednessRotationMatrix
+        Rz : RotationMatrix
             Rotation around the Z-axis.
         order : IntrinsicRotationOrder
             Intrinsic order of rotation application (default: ``XYZ``).
@@ -148,14 +147,14 @@ class GeometryRotationMatrix:
 
         Returns
         -------
-        HandednessRotationMatrix
+        RotationMatrix
             Composite intrinsic rotation matrix.
         """
         rot_map = {"X": Rx.value, "Y": Ry.value, "Z": Rz.value}
         value = np.eye(3)
         for axis in order.value:
-            value = rot_map[axis] @ value
-        return HandednessRotationMatrix(value=value, coordinate_handedness=coordinate_system)
+            value = value @ rot_map[axis]
+        return RotationMatrix(value=value, coordinate_handedness=coordinate_system)
 
     @classmethod
     def from_xyz_angles(
@@ -165,7 +164,7 @@ class GeometryRotationMatrix:
         z_radian: float, 
         order: IntrinsicRotationOrder = IntrinsicRotationOrder.ZXY,
         coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> HandednessRotationMatrix:
+        ) -> RotationMatrix:
         """
         Create a composite rotation matrix from x, y, and z angles.
 
@@ -184,7 +183,7 @@ class GeometryRotationMatrix:
 
         Returns
         -------
-        HandednessRotationMatrix
+        RotationMatrix
             Composite rotation matrix.
         """
         Rx = GeometryRotationMatrix.register_from_x_radian(

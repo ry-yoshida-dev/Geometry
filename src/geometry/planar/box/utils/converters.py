@@ -1,4 +1,5 @@
 import numpy as np
+
 from ....array_types import NumericArray
 
 
@@ -128,7 +129,7 @@ class Box2dConverters:
         w = x2 - x1
         h = y2 - y1
         s = w * h
-        r = w / np.maximum(h, np.finfo(float).eps)  # Avoid division by zero
+        r = w / np.maximum(h, np.finfo(float).eps)
         return np.concatenate([cx, cy, s, r], axis=-1)
 
     @staticmethod
@@ -167,7 +168,7 @@ class Box2dConverters:
         NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         cx, cy, r, h = np.split(boxes, 4, axis=-1)
-        w = r * h  # r = w/h, so w = r * h
+        w = r * h
         return np.concatenate([cx - w / 2, cy - h / 2, w, h], axis=-1)
 
     @staticmethod
@@ -184,7 +185,7 @@ class Box2dConverters:
         ---------
         NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
-        cx, cy, r, h = np.split(boxes, 4, axis=-1)  # r = w/h
+        cx, cy, r, h = np.split(boxes, 4, axis=-1)
         w = r * h
         return np.concatenate([cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2], axis=-1)
 
@@ -219,9 +220,9 @@ class Box2dConverters:
         ---------
         NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
-        cx, cy, s, r = np.split(boxes, 4, axis=-1)  # s = w*h, r = w/h
-        w = np.sqrt(s * r)  # s * r = wh * w/h = w^2
-        h = np.sqrt(s / r)  # s / r = wh * h/w = h^2
+        cx, cy, s, r = np.split(boxes, 4, axis=-1)
+        w = np.sqrt(s * r)
+        h = np.sqrt(s / r)
         return np.concatenate([cx - w / 2, cy - h / 2, w, h], axis=-1)
 
     @staticmethod
@@ -238,10 +239,10 @@ class Box2dConverters:
         ---------
         NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
-        cx, cy, s, r = np.split(boxes, 4, axis=-1)  # s = w*h, r = w/h
+        cx, cy, s, r = np.split(boxes, 4, axis=-1)
         
-        w = np.sqrt(s * r)  # s * r = wh * w/h = w^2
-        h = np.sqrt(s / r)  # s / r = wh * h/w = h^2
+        w = np.sqrt(s * r)
+        h = np.sqrt(s / r)
         x1 = cx - w / 2
         y1 = cy - h / 2
         x2 = cx + w / 2

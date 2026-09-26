@@ -1,34 +1,37 @@
 from __future__ import annotations
 
-from ...array_types import NumericArray, NumericScalar
-import numpy as np
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
+
+import numpy as np
+
+from ...array_types import NumericArray, NumericScalar
 
 if TYPE_CHECKING:
     from .normalized_orthogonal_vectors import OrthonormalBasis
 from ..point import Point3D
 from .base import Vector3D as Vector3DBase
 
+
 @dataclass
 class Vector3D(Vector3DBase[NumericScalar]):
     value: NumericArray
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.value.shape != (3,):
             raise ValueError("value must have shape (3,)")
 
     @property
     def x(self) -> NumericScalar:
-        return self.value[0].item()
+        return cast(NumericScalar, self.value[0].item())
     
     @property
     def y(self) -> NumericScalar:
-        return self.value[1].item()
+        return cast(NumericScalar, self.value[1].item())
     
     @property
     def z(self) -> NumericScalar:
-        return self.value[2].item()
+        return cast(NumericScalar, self.value[2].item())
 
     @property
     def norm(self) -> float:
@@ -39,7 +42,7 @@ class Vector3D(Vector3DBase[NumericScalar]):
         norm = np.linalg.norm(self.value)
         if norm == 0:
             raise ValueError("Cannot compute a unit vector from a zero-length vector.")
-        return self.value / norm 
+        return cast(NumericArray, self.value / norm)
 
     def cross(
         self, 
@@ -61,7 +64,7 @@ class Vector3D(Vector3DBase[NumericScalar]):
         normal = np.cross(self.value, other_vector.value)
         return Vector3D(value=normal)
 
-    def gram_schmidt(self, other_vector: Vector3D) -> "OrthonormalBasis":
+    def gram_schmidt(self, other_vector: Vector3D) -> OrthonormalBasis:
         """
         Perform Gram-Schmidt orthogonalization to create an orthonormal basis.
         
@@ -107,7 +110,7 @@ class Vector3D(Vector3DBase[NumericScalar]):
         return np.allclose(cross, 0.0, atol=1e-4)
 
     def is_orthogonal(self, other_vector: Vector3D) -> bool:
-        return np.isclose(np.dot(self.value, other_vector.value), 0.0, atol=1e-4)
+        return bool(np.isclose(np.dot(self.value, other_vector.value), 0.0, atol=1e-4))
 
     @property
     def is_unit(self) -> bool:

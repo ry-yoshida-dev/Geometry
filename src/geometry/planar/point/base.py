@@ -7,20 +7,17 @@ NumericArray (per-row components for a batch). Coordinates follow image space
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
 
 import numpy as np
 from shapely.geometry.base import BaseGeometry
 
-T = TypeVar("T", NumericScalar, NumericArray)
-G = TypeVar("G", bound=BaseGeometry)
+from ...array_types import NumericArray, NumericScalar
 
 
 @dataclass
-class Point2D(ABC, Generic[T, G]):
+class Point2D[T: (NumericScalar, NumericArray), G: BaseGeometry](ABC):
     """
     Abstract single point or batch stored as a NumPy array.
 

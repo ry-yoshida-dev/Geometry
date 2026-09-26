@@ -6,18 +6,16 @@ NumericArray (per-row values for a batch).
 """
 from __future__ import annotations
 
-from ...array_types import FloatArray, NumericArray, NumericScalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
 
 import numpy as np
 
-T = TypeVar("T", NumericScalar, NumericArray)
+from ...array_types import FloatArray, NumericArray, NumericScalar
 
 
 @dataclass
-class Vector3D(ABC, Generic[T]):
+class Vector3D[T: (NumericScalar, NumericArray)](ABC):
     """
     Abstract single vector or batch stored as a NumPy array.
 

@@ -1,9 +1,12 @@
 from __future__ import annotations
-from ...array_types import NumericArray
-import numpy as np
+
 from dataclasses import dataclass
 
+import numpy as np
 from units import Angle, AngleUnit
+
+from ...array_types import NumericArray
+
 
 @dataclass
 class PolarCoordinate:
@@ -20,7 +23,7 @@ class PolarCoordinate:
     radius: NumericArray
     angle: Angle
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """
         Post-init validation.
 

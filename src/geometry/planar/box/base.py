@@ -5,24 +5,22 @@ T is either NumericScalar (single box) or NumericArray (batch).
 Coordinates are always absolute pixel values in image space (x right, y down).
 """
 from __future__ import annotations
-from ...array_types import FloatArray, NumericArray, NumericScalar
-import numpy as np
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, TypeVar
 
+import numpy as np
+
+from ...array_types import FloatArray, NumericArray, NumericScalar
 from .format import Box2DFormat
 from .utils import Box2dConverter
 
-T = TypeVar('T', NumericScalar, NumericArray)
-CropSliceT = TypeVar(
-    'CropSliceT',
-    tuple[slice, slice],
-    list[tuple[slice, slice]],
-)
 
 @dataclass
-class Box2D(ABC, Generic[T, CropSliceT]):
+class Box2D[
+    T: (NumericScalar, NumericArray),
+    CropSliceT: (tuple[slice, slice], list[tuple[slice, slice]]),
+](ABC):
     """
     Abstract 2D bounding box stored as a NumPy array.
 
@@ -199,17 +197,17 @@ class Box2D(ABC, Generic[T, CropSliceT]):
     @abstractmethod
     def aspect_ratio(self) -> float | FloatArray:
         """
-        Aspect ratio height / width of the box or each box.
+        Aspect ratio width / height of the box or each box.
 
         Returns
         -------
         float | FloatArray
-            Height divided by width.
+            Width divided by height.
 
         Raises
         ------
         ZeroDivisionError
-            If any width is zero (batch: if any row has zero width).
+            If any height is zero (batch: if any row has zero height).
         """
 
     def __repr__(self) -> str:

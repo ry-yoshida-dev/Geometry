@@ -1,8 +1,7 @@
-from .box2d_converter import Box2dConverter
 from .box2d_calculator import BboxCalculator
-
+from .box2d_converter import Box2dConverter
 
 __all__ = [
-    "Box2dConverter",
-    "BboxCalculator"
+    "BboxCalculator",
+    "Box2dConverter"
 ]

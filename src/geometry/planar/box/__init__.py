@@ -1,12 +1,12 @@
-from .box import Box2D 
+from .box import Box2D
 from .boxes import Boxes2D
 from .format import Box2DFormat
-from .utils import Box2dConverter, BboxCalculator
+from .utils import BboxCalculator, Box2dConverter
 
 __all__ = [
+    "BboxCalculator",
     "Box2D",
-    "Boxes2D",
     "Box2DFormat",
     "Box2dConverter",
-    "BboxCalculator"
+    "Boxes2D"
 ]

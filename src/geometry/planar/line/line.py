@@ -7,12 +7,12 @@ LineString and Vector2D for displacement along the segment.
 """
 from __future__ import annotations
 
-from ...array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
 
 import numpy as np
 from shapely.geometry import LineString
 
+from ...array_types import NumericArray
 from ..point import Point2D, Points2D
 from ..vector import Vector2D
 from .base import Line2D as Line2DBase

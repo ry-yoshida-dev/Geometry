@@ -1,8 +1,9 @@
 from __future__ import annotations
-from ...array_types import NumericArray, NumericScalar
+
 from dataclasses import dataclass
-import numpy as np
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
+
+from ...array_types import NumericArray, NumericScalar
 from .base import Point3D as Point3DBase
 
 if TYPE_CHECKING:
@@ -12,21 +13,21 @@ if TYPE_CHECKING:
 class Point3D(Point3DBase[NumericScalar]):
     value: NumericArray
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.value.shape != (3,):
             raise ValueError("value must have shape (3,)")
     
     @property
     def x(self) -> NumericScalar:
-        return self.value[0].item()
+        return cast(NumericScalar, self.value[0].item())
     
     @property
     def y(self) -> NumericScalar:
-        return self.value[1].item()
+        return cast(NumericScalar, self.value[1].item())
     
     @property
     def z(self) -> NumericScalar:
-        return self.value[2].item()
+        return cast(NumericScalar, self.value[2].item())
     
     @property
     def array(self) -> NumericArray:
@@ -46,7 +47,7 @@ class Point3D(Point3DBase[NumericScalar]):
     def __sub__(
         self, 
         other: Point3D
-        ) -> "Vector3D":
+        ) -> Vector3D:
         """
         Subtract two points.
 

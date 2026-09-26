@@ -25,11 +25,3 @@ class Geometry2DMeasure:
         float: The distance between the two input shapes.
         """
         return input1.shapely.distance(input2.shapely)
-
-    # @staticmethod
-    # def measure_intersection(input1: Polygon, input2: Polygon) -> float:
-    #     return input1.intersection(input2).area
-
-    # @staticmethod
-    # def measure_union(input1: Polygon, input2: Polygon) -> float:
-    #     return input1.union(input2).area

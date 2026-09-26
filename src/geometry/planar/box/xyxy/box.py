@@ -4,10 +4,11 @@ Single bounding box in XYXY (two corners) format.
 The value array has length 4: x1, y1, x2, y2 in absolute pixel coordinates.
 x1 must be strictly less than x2 and y1 strictly less than y2.
 """
-import numpy as np
-from ....array_types import NumericArray, NumericScalar
 from dataclasses import dataclass
 
+import numpy as np
+
+from ....array_types import NumericArray, NumericScalar
 from ..box import Box2D
 from ..format import Box2DFormat
 
@@ -37,7 +38,7 @@ class Box2D_XYXY(Box2D):
         If x1 >= x2 or y1 >= y2 after construction.
     """
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         super().__post_init__()
         if self.x1 >= self.x2:
             raise ValueError(
@@ -70,7 +71,7 @@ class Box2D_XYXY(Box2D):
         float
             x2 minus x1 in pixels.
         """
-        return self.value[2] - self.value[0]
+        return self.x2 - self.x1
 
     @property
     def height(self) -> NumericScalar:
@@ -82,7 +83,7 @@ class Box2D_XYXY(Box2D):
         float
             y2 minus y1 in pixels.
         """
-        return self.value[3] - self.value[1]
+        return self.y2 - self.y1
 
     @property
     def x1(self) -> NumericScalar:
@@ -94,7 +95,7 @@ class Box2D_XYXY(Box2D):
         float
             Index 0 of value — left x in pixel coordinates.
         """
-        return self.value[0]
+        return self._component(0)
 
     @property
     def y1(self) -> NumericScalar:
@@ -106,7 +107,7 @@ class Box2D_XYXY(Box2D):
         float
             Index 1 of value — top y in pixel coordinates.
         """
-        return self.value[1]
+        return self._component(1)
 
     @property
     def x2(self) -> NumericScalar:
@@ -118,7 +119,7 @@ class Box2D_XYXY(Box2D):
         float
             Index 2 of value — right x in pixel coordinates.
         """
-        return self.value[2]
+        return self._component(2)
 
     @property
     def y2(self) -> NumericScalar:
@@ -130,7 +131,7 @@ class Box2D_XYXY(Box2D):
         float
             Index 3 of value — bottom y in pixel coordinates.
         """
-        return self.value[3]
+        return self._component(3)
 
     @property
     def y_max(self) -> NumericScalar:
@@ -142,7 +143,7 @@ class Box2D_XYXY(Box2D):
         float
             Bottom y of the rectangle.
         """
-        return self.value[3]
+        return self._component(3)
 
     @property
     def area(self) -> NumericScalar:
@@ -154,7 +155,7 @@ class Box2D_XYXY(Box2D):
         float
             (x2 - x1) times (y2 - y1).
         """
-        return (self.value[2] - self.value[0]) * (self.value[3] - self.value[1])
+        return self.width * self.height
 
     @property
     def center(self) -> NumericArray:

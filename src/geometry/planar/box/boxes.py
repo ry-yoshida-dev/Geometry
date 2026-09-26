@@ -1,20 +1,23 @@
 """
 Batch of 2D bounding boxes (N rows, 4 columns) extending base.Box2D.
 
-Concrete batched formats (XYXY, XYWH) live in boxes_. This module validates
+Concrete batched formats live in the xyxy and xywh subpackages. This module validates
 shape (N, 4) and provides per-box conversion, cropping, and Shapely access.
 """
 from __future__ import annotations
-from ...array_types import FloatArray, NumericArray
-import numpy as np
+
 from abc import abstractmethod
 from dataclasses import dataclass
+
+import numpy as np
 from shapely.geometry import Polygon
 
+from ...array_types import FloatArray, NumericArray
 from .base import Box2D as Box2DBase
 from .box import Box2D
 from .format import Box2DFormat
 from .utils import Box2dConverter
+
 
 @dataclass
 class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
@@ -30,7 +33,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         Shape (N, 4); row layout depends on :attr:`box_format`.
     """
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """
         Validate shape after initialization and coerce to ndarray.
 
@@ -205,17 +208,17 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         out: list[tuple[slice, slice]] = []
         for row in xyxy:
             x1, y1, x2, y2 = row
-            y_min = int(round(y1))
-            y_max = int(round(y2))
-            x_min = int(round(x1))
-            x_max = int(round(x2))
+            y_min = round(y1)
+            y_max = round(y2)
+            x_min = round(x1)
+            x_max = round(x2)
             out.append((slice(y_min, y_max), slice(x_min, x_max)))
         return out
 
     @property
     def aspect_ratio(self) -> FloatArray:
         """
-        Aspect ratio height / width for each bounding box.
+        Aspect ratio width / height for each bounding box.
 
         Returns
         -------
@@ -225,11 +228,11 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         Raises
         ------
         ZeroDivisionError
-            If any box has zero width.
+            If any box has zero height.
         """
-        if np.any(self.width == 0):
-            raise ZeroDivisionError("Width of at least one box is zero, cannot compute aspect ratio.")
-        return np.divide(self.height, self.width, dtype=np.float64)
+        if np.any(self.height == 0):
+            raise ZeroDivisionError("Height of at least one box is zero, cannot compute aspect ratio.")
+        return np.divide(self.width, self.height, dtype=np.float64)
 
     @property
     def shapely(self) -> list[Polygon]:
@@ -259,7 +262,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         int
             Row count N of :attr:`value`.
         """
-        return self.value.shape[0]
+        return len(self.value)
 
     def __getitem__(self, index: int | slice) -> Box2D | Boxes2D:
         """
@@ -311,11 +314,10 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         """
         match box2d_format:
             case Box2DFormat.XYXY | Box2DFormat.TLBR:
-                from .boxes_ import Boxes2D_XYXY
-                cls_ = Boxes2D_XYXY
+                from .xyxy import Boxes2D_XYXY
+                return Boxes2D_XYXY(value=value)
             case Box2DFormat.XYWH | Box2DFormat.TLWH:
-                from .boxes_ import Boxes2D_XYWH
-                cls_ = Boxes2D_XYWH
+                from .xywh import Boxes2D_XYWH
+                return Boxes2D_XYWH(value=value)
             case _:
                 raise ValueError(f"Unsupported box format: {box2d_format}")
-        return cls_(value=value)

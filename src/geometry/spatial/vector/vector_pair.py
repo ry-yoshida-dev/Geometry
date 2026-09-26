@@ -1,5 +1,7 @@
-from .vector import Vector3D
 from dataclasses import dataclass
+
+from .vector import Vector3D
+
 
 @dataclass
 class Vector3DPair:
@@ -21,7 +23,7 @@ class Vector3DPair:
     vector1: Vector3D
     vector2: Vector3D
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.vector1.is_parallel(self.vector2):
             raise ValueError("The two vectors are parallel. Input non-parallel vectors.")
 

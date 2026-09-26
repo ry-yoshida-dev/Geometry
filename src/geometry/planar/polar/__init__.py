@@ -1,8 +1,9 @@
-from .coordinate import PolarCoordinate
 from units import Angle, AngleUnit
 
+from .coordinate import PolarCoordinate
+
 __all__ = [
-    "PolarCoordinate",
     "Angle",
-    "AngleUnit"
+    "AngleUnit",
+    "PolarCoordinate"
     ]
