@@ -203,17 +203,23 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         list[tuple[slice, slice]]
             Length N; each element is (yslice, xslice) for NumPy
             image[yslice, xslice] indexing.
+
+        Raises
+        ------
+        ValueError
+            If any rounded edge of any box is negative, since NumPy would
+            interpret it as an index counted from the end of the image.
         """
-        xyxy = self.to_format(Box2DFormat.XYXY)
-        out: list[tuple[slice, slice]] = []
-        for row in xyxy:
-            x1, y1, x2, y2 = row
-            y_min = round(y1)
-            y_max = round(y2)
-            x_min = round(x1)
-            x_max = round(x2)
-            out.append((slice(y_min, y_max), slice(x_min, x_max)))
-        return out
+        rounded_edges = np.round(self.to_format(Box2DFormat.XYXY)).astype(np.int64)
+        negative_rows = np.flatnonzero(np.any(rounded_edges < 0, axis=1))
+        if negative_rows.size > 0:
+            raise ValueError(
+                f"crop_slice requires non-negative edges, but rows {negative_rows.tolist()} have negative edges"
+            )
+        return [
+            (slice(int(y_min), int(y_max)), slice(int(x_min), int(x_max)))
+            for x_min, y_min, x_max, y_max in rounded_edges
+        ]
 
     @property
     def aspect_ratio(self) -> FloatArray:

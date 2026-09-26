@@ -229,11 +229,21 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         -------
         tuple[slice, slice]
             (yslice, xslice) from rounded box edges in pixel coordinates.
+
+        Raises
+        ------
+        ValueError
+            If any rounded edge is negative, since NumPy would interpret it
+            as an index counted from the end of the image.
         """
         y_min = round(self.y1)
         y_max = round(self.y2)
         x_min = round(self.x1)
         x_max = round(self.x2)
+        if min(x_min, y_min, x_max, y_max) < 0:
+            raise ValueError(
+                f"crop_slice requires non-negative edges, but got x1={x_min}, y1={y_min}, x2={x_max}, y2={y_max}"
+            )
 
         return (
             slice(y_min, y_max),

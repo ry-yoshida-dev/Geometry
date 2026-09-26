@@ -167,6 +167,11 @@ class Box2D[
         -------
         CropSliceT
             tuple[slice, slice] or list[tuple[slice, slice]].
+
+        Raises
+        ------
+        ValueError
+            If any rounded edge is negative.
         """
 
     def to_format(
