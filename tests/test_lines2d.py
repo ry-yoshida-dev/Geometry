@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+
 from geometry.planar import Line2D, Lines2D, Point2D, Points2D, Vector2D
 
 
@@ -85,9 +86,15 @@ class TestLines2D:
         np.testing.assert_allclose(lines.length, [5.0, 1.0, 0.0])
 
     def test_start_end_center(self, lines: Lines2D) -> None:
-        np.testing.assert_allclose(lines.start.value, [[0.0, 0.0], [1.0, 1.0], [2.0, 2.0]])
-        np.testing.assert_allclose(lines.end.value, [[3.0, 4.0], [1.0, 2.0], [2.0, 2.0]])
-        np.testing.assert_allclose(lines.center.value, [[1.5, 2.0], [1.0, 1.5], [2.0, 2.0]])
+        np.testing.assert_allclose(
+            lines.start.value, [[0.0, 0.0], [1.0, 1.0], [2.0, 2.0]]
+        )
+        np.testing.assert_allclose(
+            lines.end.value, [[3.0, 4.0], [1.0, 2.0], [2.0, 2.0]]
+        )
+        np.testing.assert_allclose(
+            lines.center.value, [[1.5, 2.0], [1.0, 1.5], [2.0, 2.0]]
+        )
 
     def test_vectors(self, lines: Lines2D) -> None:
         np.testing.assert_allclose(lines.vectors, [[3.0, 4.0], [0.0, 1.0], [0.0, 0.0]])

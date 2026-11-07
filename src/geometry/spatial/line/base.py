@@ -4,6 +4,7 @@ Abstract 3D line segment protocol for scalar or batch storage.
 The type parameter T is either float (single-segment length) or NumericArray
 (per-row lengths for a batch).
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+
 from geometry.planar import Line2D, Point2D, Vector2D, Vector2DPair, Vectors2D
 
 
@@ -36,7 +37,9 @@ class TestVector2D:
             ([1.0, 0.0], [1.0, 1.0], False),
         ],
     )
-    def test_is_orthogonal(self, first: list[float], second: list[float], is_expected_orthogonal: bool) -> None:
+    def test_is_orthogonal(
+        self, first: list[float], second: list[float], is_expected_orthogonal: bool
+    ) -> None:
         first_vector = Vector2D(value=np.array(first))
         second_vector = Vector2D(value=np.array(second))
         assert first_vector.is_orthogonal(second_vector) is is_expected_orthogonal
@@ -49,7 +52,9 @@ class TestVector2D:
             ([1.0, 0.0], [0.0, 1.0], False),
         ],
     )
-    def test_is_parallel(self, first: list[float], second: list[float], is_expected_parallel: bool) -> None:
+    def test_is_parallel(
+        self, first: list[float], second: list[float], is_expected_parallel: bool
+    ) -> None:
         first_vector = Vector2D(value=np.array(first))
         second_vector = Vector2D(value=np.array(second))
         assert first_vector.is_parallel(second_vector) is is_expected_parallel
@@ -62,7 +67,9 @@ class TestVector2D:
         np.testing.assert_allclose(vector.value, [3.0, 4.0])
 
     def test_to_line(self) -> None:
-        line = Vector2D(value=np.array([3.0, 4.0])).to_line(Point2D(value=np.array([1.0, 1.0])))
+        line = Vector2D(value=np.array([3.0, 4.0])).to_line(
+            Point2D(value=np.array([1.0, 1.0]))
+        )
         assert isinstance(line, Line2D)
         np.testing.assert_allclose(line.value, [[1.0, 1.0], [4.0, 5.0]])
         assert line.length == pytest.approx(5.0)

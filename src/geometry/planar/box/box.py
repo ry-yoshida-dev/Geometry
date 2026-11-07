@@ -5,6 +5,7 @@ Concrete formats are implemented in the xyxy and xywh subpackages. This module
 validates value with shape (4,) and provides conversion, cropping,
 and geometry helpers.
 """
+
 from __future__ import annotations
 
 from abc import abstractmethod
@@ -71,7 +72,9 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
             case np.floating():
                 return float(component)
             case _:
-                raise TypeError(f"value must hold integers or floats, but got {component.dtype}")
+                raise TypeError(
+                    f"value must hold integers or floats, but got {component.dtype}"
+                )
 
     @property
     @abstractmethod
@@ -156,7 +159,7 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         float
             Maximum y in pixel coordinates.
         """
-    
+
     @property
     @abstractmethod
     def y_max(self) -> NumericScalar:
@@ -194,9 +197,9 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         """
 
     def to_format(
-        self, 
-        target_format: Box2DFormat, 
-        ) -> NumericArray:
+        self,
+        target_format: Box2DFormat,
+    ) -> NumericArray:
         """
         Convert this box to another coordinate layout.
 
@@ -214,8 +217,10 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
             self.value.reshape(1, 4),
             input_format=self.box_format,
             output_format=target_format,
-            as_int=False
-            ).reshape(4,)
+            as_int=False,
+        ).reshape(
+            4,
+        )
 
     @property
     def crop_slice(self) -> tuple[slice, slice]:
@@ -245,10 +250,7 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
                 f"crop_slice requires non-negative edges, but got x1={x_min}, y1={y_min}, x2={x_max}, y2={y_max}"
             )
 
-        return (
-            slice(y_min, y_max),
-            slice(x_min, x_max)
-            )
+        return (slice(y_min, y_max), slice(x_min, x_max))
 
     @property
     def aspect_ratio(self) -> float:
@@ -266,7 +268,9 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
             If height is zero.
         """
         if self.height == 0:
-            raise ZeroDivisionError("Height of the box is zero, cannot compute aspect ratio.")
+            raise ZeroDivisionError(
+                "Height of the box is zero, cannot compute aspect ratio."
+            )
         return float(self.width / self.height)
 
     @property
@@ -284,18 +288,11 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
 
     def __repr__(self) -> str:
         cls_name = self.__class__.__name__
-        box_str = np.array2string(self.value, precision=2, separator=', ')
-        return (
-            f"{cls_name}(value={box_str}, "
-            f"box_format='{self.box_format}')"
-        )
+        box_str = np.array2string(self.value, precision=2, separator=", ")
+        return f"{cls_name}(value={box_str}, box_format='{self.box_format}')"
 
     @classmethod
-    def register(
-        cls, 
-        value: NumericArray, 
-        box2d_format: Box2DFormat
-        ) -> Box2D:
+    def register(cls, value: NumericArray, box2d_format: Box2DFormat) -> Box2D:
         """
         Construct the appropriate concrete :class:`Box2D` for box2d_format.
 
@@ -314,9 +311,11 @@ class Box2D(Box2DBase[NumericScalar, tuple[slice, slice]]):
         match box2d_format:
             case Box2DFormat.XYXY | Box2DFormat.TLBR:
                 from .xyxy import Box2D_XYXY
+
                 return Box2D_XYXY(value=value)
             case Box2DFormat.XYWH | Box2DFormat.TLWH:
                 from .xywh import Box2D_XYWH
+
                 return Box2D_XYWH(value=value)
             case _:
                 raise ValueError(f"Unsupported box format: {box2d_format}")

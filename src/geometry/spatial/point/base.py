@@ -4,6 +4,7 @@ Abstract 3D point protocol for scalar or batch storage.
 The type parameter T is either NumericScalar (single coordinate component) or
 NumericArray (per-row components for a batch).
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+
 from geometry.planar import Geometry2DMeasure, Line2D, Point2D, Points2D, Vector2D
 
 
@@ -39,13 +40,17 @@ class TestPoint2D:
         assert point.x == 3.0
 
     def test_subtraction_returns_vector(self) -> None:
-        difference = Point2D(value=np.array([5.0, 7.0])) - Point2D(value=np.array([2.0, 3.0]))
+        difference = Point2D(value=np.array([5.0, 7.0])) - Point2D(
+            value=np.array([2.0, 3.0])
+        )
         assert isinstance(difference, Vector2D)
         np.testing.assert_allclose(difference.value, [3.0, 4.0])
 
     def test_addition_and_scaling(self) -> None:
         point = Point2D(value=np.array([1.0, 2.0]))
-        np.testing.assert_allclose(point + Point2D(value=np.array([3.0, 4.0])), [4.0, 6.0])
+        np.testing.assert_allclose(
+            point + Point2D(value=np.array([3.0, 4.0])), [4.0, 6.0]
+        )
         np.testing.assert_allclose(point * 2.0, [2.0, 4.0])
 
     def test_shapely(self) -> None:
@@ -147,4 +152,6 @@ class TestGeometry2DMeasure:
 
     def test_point_inside_polygon_is_zero(self, unit_square: Points2D) -> None:
         point = Point2D(value=np.array([0.5, 0.5]))
-        assert Geometry2DMeasure.measure_distance(point, unit_square) == pytest.approx(0.0)
+        assert Geometry2DMeasure.measure_distance(point, unit_square) == pytest.approx(
+            0.0
+        )

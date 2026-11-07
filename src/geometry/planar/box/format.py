@@ -7,7 +7,7 @@ class Box2DFormat(Enum):
     """
     Enum class for the format of the bounding box.
 
-    Attributes:
+    Attributes
     ----------
     XYXY: top-left and bottom-right corners
     TLBR: alias of XYXY
@@ -19,7 +19,8 @@ class Box2DFormat(Enum):
     CXCYAH: alias of UVAH
     UVSR: center (u,v), area (width * height), aspect ratio (width / height)
     CXCYSR: alias of UVSR
-    """    
+    """
+
     XYXY = "xyxy"
     TLBR = "tlbr"
     XYWH = "xywh"
@@ -77,4 +78,3 @@ class Box2DFormat(Enum):
                 return Box2DFormat.UVAH
             case Box2DFormat.UVSR | Box2DFormat.CXCYSR:
                 return Box2DFormat.UVSR
-

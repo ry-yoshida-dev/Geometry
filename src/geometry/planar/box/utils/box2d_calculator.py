@@ -76,8 +76,18 @@ class BboxCalculator:
         """
         first = BboxCalculator._as_float64(boxes1)
         second = BboxCalculator._as_float64(boxes2)
-        first_x1, first_y1, first_x2, first_y2 = first[:, 0], first[:, 1], first[:, 2], first[:, 3]
-        second_x1, second_y1, second_x2, second_y2 = second[:, 0], second[:, 1], second[:, 2], second[:, 3]
+        first_x1, first_y1, first_x2, first_y2 = (
+            first[:, 0],
+            first[:, 1],
+            first[:, 2],
+            first[:, 3],
+        )
+        second_x1, second_y1, second_x2, second_y2 = (
+            second[:, 0],
+            second[:, 1],
+            second[:, 2],
+            second[:, 3],
+        )
 
         if is_all_combinations:
             first_x1 = first_x1[:, None]
@@ -85,8 +95,12 @@ class BboxCalculator:
             first_x2 = first_x2[:, None]
             first_y2 = first_y2[:, None]
 
-        intersection_width = np.clip(np.minimum(first_x2, second_x2) - np.maximum(first_x1, second_x1), 0.0, None)
-        intersection_height = np.clip(np.minimum(first_y2, second_y2) - np.maximum(first_y1, second_y1), 0.0, None)
+        intersection_width = np.clip(
+            np.minimum(first_x2, second_x2) - np.maximum(first_x1, second_x1), 0.0, None
+        )
+        intersection_height = np.clip(
+            np.minimum(first_y2, second_y2) - np.maximum(first_y1, second_y1), 0.0, None
+        )
         intersection = intersection_width * intersection_height
 
         first_area = (first[:, 2] - first[:, 0]) * (first[:, 3] - first[:, 1])
@@ -114,7 +128,9 @@ class BboxCalculator:
         FloatArray
             Array of minimum intersection ratios of shape (N, M).
         """
-        intersection, first_area, second_area = BboxCalculator.compute_intersection_area(boxes1, boxes2)
+        intersection, first_area, second_area = (
+            BboxCalculator.compute_intersection_area(boxes1, boxes2)
+        )
         epsilon = np.finfo(np.float64).eps
 
         first_ratio = intersection / (first_area[:, None] + epsilon)
@@ -145,12 +161,16 @@ class BboxCalculator:
         FloatArray
             IoU values of shape (N, M), or (N,) when not all combinations.
         """
-        intersection, first_area, second_area = BboxCalculator.compute_intersection_area(
-            boxes1=boxes1,
-            boxes2=boxes2,
-            is_all_combinations=is_all_combinations,
+        intersection, first_area, second_area = (
+            BboxCalculator.compute_intersection_area(
+                boxes1=boxes1,
+                boxes2=boxes2,
+                is_all_combinations=is_all_combinations,
+            )
         )
-        broadcast_first_area = first_area[:, None] if is_all_combinations else first_area
+        broadcast_first_area = (
+            first_area[:, None] if is_all_combinations else first_area
+        )
         union = broadcast_first_area + second_area - intersection
         return intersection / np.maximum(union, np.finfo(np.float64).eps)
 
@@ -218,7 +238,9 @@ class BboxCalculator:
         FloatArray
             DIoU values of shape (N, M).
         """
-        iou = BboxCalculator.compute_iou(boxes1=boxes1, boxes2=boxes2, is_all_combinations=True)
+        iou = BboxCalculator.compute_iou(
+            boxes1=boxes1, boxes2=boxes2, is_all_combinations=True
+        )
         first = BboxCalculator._as_float64(boxes1)
         second = BboxCalculator._as_float64(boxes2)
 
@@ -232,7 +254,9 @@ class BboxCalculator:
         enclosing_size = enclosing_bottom_right - enclosing_top_left
         squared_enclosing_diagonal = np.sum(enclosing_size**2, axis=-1)
 
-        return iou - squared_center_distances / np.maximum(squared_enclosing_diagonal, np.finfo(np.float64).eps)
+        return iou - squared_center_distances / np.maximum(
+            squared_enclosing_diagonal, np.finfo(np.float64).eps
+        )
 
     @staticmethod
     def compute_ciou(
@@ -263,14 +287,16 @@ class BboxCalculator:
         second_width = second[:, 2] - second[:, 0]
         second_height = second[:, 3] - second[:, 1]
 
-        aspect_angle_difference: NDArray[np.float64] = np.arctan(second_width[None, :] / second_height[None, :]) - np.arctan(
-            first_width[:, None] / first_height[:, None]
-        )
+        aspect_angle_difference: NDArray[np.float64] = np.arctan(
+            second_width[None, :] / second_height[None, :]
+        ) - np.arctan(first_width[:, None] / first_height[:, None])
         aspect_consistency = (4 / np.pi**2) * aspect_angle_difference**2
 
         with np.errstate(divide="ignore", invalid="ignore"):
             iou = BboxCalculator.compute_iou(boxes1, boxes2)
-            trade_off = aspect_consistency / (1 - iou + aspect_consistency + np.finfo(np.float64).eps)
+            trade_off = aspect_consistency / (
+                1 - iou + aspect_consistency + np.finfo(np.float64).eps
+            )
 
         return diou - trade_off * aspect_consistency
 
@@ -294,7 +320,9 @@ class BboxCalculator:
         FloatArray
             GIoU values of shape (N, M).
         """
-        intersection, first_area, second_area = BboxCalculator.compute_intersection_area(boxes1, boxes2)
+        intersection, first_area, second_area = (
+            BboxCalculator.compute_intersection_area(boxes1, boxes2)
+        )
         union = first_area[:, None] + second_area - intersection
         iou: NDArray[np.float64] = intersection / np.maximum(union, 1e-7)
 
@@ -412,7 +440,9 @@ class BboxCalculator:
         uncertainty = 1 - BboxCalculator._as_float64(confidences1)[:, None]
 
         first_expanded = BboxCalculator._expand_by_uncertainty(first, uncertainty * k1)
-        second_expanded = BboxCalculator._expand_by_uncertainty(second, uncertainty * k2)
+        second_expanded = BboxCalculator._expand_by_uncertainty(
+            second, uncertainty * k2
+        )
 
         intersection_width: NDArray[np.float64] = np.clip(
             np.minimum(first_expanded[..., 2], second_expanded[..., 2])
@@ -524,7 +554,8 @@ class BboxCalculator:
                 | Box2DFormat.CXCYSR
             ):
                 return boxes[:, :2]
-            case _:
+            # Unreachable for typed callers; kept as a runtime guard for untyped input.
+            case _:  # pyright: ignore[reportUnnecessaryComparison]
                 raise ValueError(f"Invalid box format: {box_format}")
 
     @staticmethod

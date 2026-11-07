@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from geometry.planar import PolarCoordinate
 from units import Angle, AngleUnit
+
+from geometry.planar import PolarCoordinate
 
 
 @pytest.fixture
@@ -52,9 +53,13 @@ class TestPolarCoordinateConversion:
         np.testing.assert_allclose(polar.uv, expected, atol=1e-12)
 
     def test_from_uv(self) -> None:
-        polar = PolarCoordinate.from_uv(u=np.array([3.0, 0.0, -1.0]), v=np.array([4.0, -2.0, 0.0]))
+        polar = PolarCoordinate.from_uv(
+            u=np.array([3.0, 0.0, -1.0]), v=np.array([4.0, -2.0, 0.0])
+        )
         np.testing.assert_allclose(polar.radius, [5.0, 2.0, 1.0])
-        np.testing.assert_allclose(polar.degree, [np.degrees(np.arctan2(4.0, 3.0)), -90.0, 180.0])
+        np.testing.assert_allclose(
+            polar.degree, [np.degrees(np.arctan2(4.0, 3.0)), -90.0, 180.0]
+        )
 
     def test_round_trip(self) -> None:
         generator = np.random.default_rng(0)

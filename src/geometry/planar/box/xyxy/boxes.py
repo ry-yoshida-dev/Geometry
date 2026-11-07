@@ -4,6 +4,7 @@ Batch of bounding boxes in XYXY (two corners) format.
 Each row has length 4: x1, y1, x2, y2 in absolute pixel coordinates.
 For every box, x1 must be strictly less than x2 and y1 strictly less than y2.
 """
+
 from dataclasses import dataclass
 
 import numpy as np

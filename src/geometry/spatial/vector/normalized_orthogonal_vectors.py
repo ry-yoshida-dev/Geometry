@@ -7,12 +7,13 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .vector import Vector3D
 
+
 @dataclass
 class OrthonormalBasis:
     """
     Orthonormal basis vectors.
 
-    Attributes:
+    Attributes
     ----------
     e1: Vector3D
         The first orthonormal basis vector.
@@ -21,13 +22,14 @@ class OrthonormalBasis:
     e3: Vector3D
         The third orthonormal basis vector.
 
-    Raises:
+    Raises
     ------
     ValueError:
         If the vectors are not orthonormal.
         - If the vectors are not unit vectors.
         - If the vectors are not orthogonal.
     """
+
     e1: Vector3D
     e2: Vector3D
     e3: Vector3D
@@ -49,11 +51,10 @@ class OrthonormalBasis:
     def __getitem__(self, index: int) -> Vector3D:
         if index not in (-3, -2, -1, 0, 1, 2):
             raise IndexError(f"index {index} out of range")
-        return  (self.e1, self.e2, self.e3)[index]
+        return (self.e1, self.e2, self.e3)[index]
 
     def __len__(self) -> int:
         return 3
 
     def __iter__(self) -> Iterator[Vector3D]:
         return iter((self.e1, self.e2, self.e3))
-

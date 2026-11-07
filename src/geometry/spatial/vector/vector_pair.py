@@ -20,12 +20,15 @@ class Vector3DPair:
     ValueError:
         If the two vectors are parallel.
     """
+
     vector1: Vector3D
     vector2: Vector3D
 
     def __post_init__(self) -> None:
         if self.vector1.is_parallel(self.vector2):
-            raise ValueError("The two vectors are parallel. Input non-parallel vectors.")
+            raise ValueError(
+                "The two vectors are parallel. Input non-parallel vectors."
+            )
 
     @property
     def is_parallel(self) -> bool:

@@ -3,6 +3,7 @@ Batch of 2D vectors (N rows, two columns) extending base.Vector2D.
 
 Validates shape (N, 2) and provides per-row components and Euclidean norms.
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterator
@@ -40,9 +41,7 @@ class Vectors2D(Vector2DBase[NumericArray]):
         """
         v = np.asarray(self.value)
         if v.ndim != 2 or v.shape[1] != 2:
-            raise ValueError(
-                f"vectors must have shape (N, 2), but got {v.shape}"
-            )
+            raise ValueError(f"vectors must have shape (N, 2), but got {v.shape}")
         self.value = v
 
     @property

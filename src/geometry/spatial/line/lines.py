@@ -14,6 +14,10 @@ from .line import Line3D
 
 @dataclass
 class Lines3D(Line3DBase[NumericArray]):
+    """
+    A batch of 3D line segments stored in an (N, 2, 3) array.
+    """
+
     value: NumericArray
 
     def __post_init__(self) -> None:
@@ -24,23 +28,63 @@ class Lines3D(Line3DBase[NumericArray]):
 
     @property
     def start(self) -> Points3D:
+        """
+        Get the start points of the lines.
+
+        Returns
+        -------
+        Points3D
+            The start point of each line, with shape (N, 3).
+        """
         return Points3D(value=self.value[:, 0, :])
 
     @property
     def end(self) -> Points3D:
+        """
+        Get the end points of the lines.
+
+        Returns
+        -------
+        Points3D
+            The end point of each line, with shape (N, 3).
+        """
         return Points3D(value=self.value[:, 1, :])
 
     @property
     def length(self) -> NumericArray:
+        """
+        Get the Euclidean length of each line.
+
+        Returns
+        -------
+        NumericArray
+            The lengths, with shape (N,).
+        """
         d = self.value[:, 1, :] - self.value[:, 0, :]
         return cast(NumericArray, np.linalg.norm(d, axis=1))
 
     @property
     def center(self) -> Points3D:
+        """
+        Get the midpoint of each line.
+
+        Returns
+        -------
+        Points3D
+            The midpoints, with shape (N, 3).
+        """
         return Points3D(value=np.mean(self.value, axis=1))
 
     @property
     def vectors(self) -> Vectors3D:
+        """
+        Get the vector from the start point to the end point of each line.
+
+        Returns
+        -------
+        Vectors3D
+            The vectors, with shape (N, 3).
+        """
         return Vectors3D(value=self.value[:, 1, :] - self.value[:, 0, :])
 
     def __len__(self) -> int:

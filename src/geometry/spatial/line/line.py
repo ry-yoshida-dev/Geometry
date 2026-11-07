@@ -12,6 +12,10 @@ from .base import Line3D as Line3DBase
 
 @dataclass
 class Line3D(Line3DBase[float]):
+    """
+    A 3D line segment stored as its start and end points in a (2, 3) array.
+    """
+
     value: NumericArray
 
     def __post_init__(self) -> None:
@@ -20,10 +24,26 @@ class Line3D(Line3DBase[float]):
 
     @property
     def start(self) -> Point3D:
+        """
+        Get the start point of the line.
+
+        Returns
+        -------
+        Point3D
+            The first row of `value`.
+        """
         return Point3D(value=self.value[0])
-    
+
     @property
     def end(self) -> Point3D:
+        """
+        Get the end point of the line.
+
+        Returns
+        -------
+        Point3D
+            The second row of `value`.
+        """
         return Point3D(value=self.value[1])
 
     @property
@@ -38,11 +58,7 @@ class Line3D(Line3DBase[float]):
         return self.end - self.start
 
     @classmethod
-    def from_start_and_end(
-        cls, 
-        start: Point3D, 
-        end: Point3D
-        ) -> Line3D:
+    def from_start_and_end(cls, start: Point3D, end: Point3D) -> Line3D:
         """
         Create a line from the start and end points.
 
@@ -61,5 +77,12 @@ class Line3D(Line3DBase[float]):
 
     @property
     def length(self) -> float:
-        return float(np.linalg.norm(self.vector3d.value))
+        """
+        Get the Euclidean length of the line.
 
+        Returns
+        -------
+        float
+            The distance from the start point to the end point.
+        """
+        return float(np.linalg.norm(self.vector3d.value))

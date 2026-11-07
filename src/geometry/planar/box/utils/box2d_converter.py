@@ -156,23 +156,23 @@ class Box2dConverter:
     def add_dimension(box: NumericArray) -> NumericArray:
         """
         Add an extra dimension to the array, converting it to a column vector.
-        
+
         This utility method reshapes a 1D array into a 2D column vector,
         useful for certain matrix operations.
-        
-        Parameters:
+
+        Parameters
         ----------
         box: NumericArray
             Input array or list
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Reshaped array with shape (N, 1)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Reshaped array with shape (N, 1)
-            
+
         Example:
             >>> box = [1, 2, 3, 4]
             >>> result = Box2dConverter.add_dimension(box)

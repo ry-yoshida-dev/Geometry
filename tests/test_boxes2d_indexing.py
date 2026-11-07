@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+
 from geometry.planar.box import Box2D, Box2DFormat, Boxes2D
 
 
@@ -32,9 +33,12 @@ class TestBoxes2DGetItem:
 
     def test_slice_returns_boxes2d_same_type(self, xyxy_boxes: Boxes2D) -> None:
         subset = xyxy_boxes[1:]
+        assert isinstance(subset, Boxes2D)
         assert type(subset) is type(xyxy_boxes)
         assert len(subset) == 1
-        np.testing.assert_array_equal(subset.value, np.array([[50.0, 60.0, 70.0, 80.0]]))
+        np.testing.assert_array_equal(
+            subset.value, np.array([[50.0, 60.0, 70.0, 80.0]])
+        )
 
     def test_negative_index_returns_last_box(self, xyxy_boxes: Boxes2D) -> None:
         box = xyxy_boxes[-1]
@@ -47,5 +51,6 @@ class TestBoxes2DGetItem:
         box = boxes[0]
         subset = boxes[:1]
         assert box.box_format == Box2DFormat.XYWH
+        assert isinstance(subset, Boxes2D)
         assert type(subset) is type(boxes)
         assert len(subset) == 1

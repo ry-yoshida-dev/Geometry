@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from geometry.utils.rotation import GeometryRotationMatrix
 from handedness_rotation import IntrinsicRotationOrder, RotationMatrix
 from scipy.spatial.transform import Rotation
+
+from geometry.utils.rotation import GeometryRotationMatrix
 
 X_RADIAN: float = 0.3
 Y_RADIAN: float = -0.7
@@ -23,6 +24,10 @@ class TestGeometryRotationMatrix:
     @pytest.mark.parametrize("order", list(IntrinsicRotationOrder))
     def test_matches_scipy_intrinsic_euler(self, order: IntrinsicRotationOrder) -> None:
         angles: dict[str, float] = {"X": X_RADIAN, "Y": Y_RADIAN, "Z": Z_RADIAN}
-        matrix = GeometryRotationMatrix.from_xyz_angles(X_RADIAN, Y_RADIAN, Z_RADIAN, order=order)
-        expected = Rotation.from_euler(order.value, [angles[axis] for axis in order.value]).as_matrix()
+        matrix = GeometryRotationMatrix.from_xyz_angles(
+            X_RADIAN, Y_RADIAN, Z_RADIAN, order=order
+        )
+        expected = Rotation.from_euler(
+            order.value, [angles[axis] for axis in order.value]
+        ).as_matrix()
         np.testing.assert_allclose(matrix.value, expected, atol=1e-12)

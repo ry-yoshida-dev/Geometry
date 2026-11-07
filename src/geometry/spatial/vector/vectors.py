@@ -13,31 +13,63 @@ from .vector import Vector3D
 
 @dataclass
 class Vectors3D:
+    """
+    A batch of 3D vectors stored as an (N, 3) array.
+    """
+
     value: NumericArray
 
     def __post_init__(self) -> None:
         if self.value.ndim != 2:
-            raise ValueError(f"value must have shape (n, 3), got shape {self.value.shape}")
+            raise ValueError(
+                f"value must have shape (n, 3), got shape {self.value.shape}"
+            )
         if self.value.shape[1] != 3:
-            raise ValueError(f"value must have shape (n, 3), got shape {self.value.shape}")
+            raise ValueError(
+                f"value must have shape (n, 3), got shape {self.value.shape}"
+            )
 
     @property
     def x(self) -> NumericArray:
+        """
+        Get the X components.
+
+        Returns
+        -------
+        NumericArray
+            The X components, with shape (N,).
+        """
         return self.value[:, 0]
 
     @property
     def y(self) -> NumericArray:
+        """
+        Get the Y components.
+
+        Returns
+        -------
+        NumericArray
+            The Y components, with shape (N,).
+        """
         return self.value[:, 1]
-    
+
     @property
     def z(self) -> NumericArray:
+        """
+        Get the Z components.
+
+        Returns
+        -------
+        NumericArray
+            The Z components, with shape (N,).
+        """
         return self.value[:, 2]
-    
+
     @property
     def unit_vectors(self) -> NumericArray:
         """
         Return the unit vectors of the vectors.
-        
+
         Returns
         -------
         NumericArray:
@@ -48,13 +80,10 @@ class Vectors3D:
             raise ValueError("Cannot compute a unit vector from a zero-length vector.")
         return cast(NumericArray, self.value / norm)
 
-    def to_azimuthal_angles(
-        self, 
-        up_index: int
-        ) -> Angle:
+    def to_azimuthal_angles(self, up_index: int) -> Angle:
         """
         Convert the points to azimuthal angles.
-        
+
         Parameters
         ----------
         up_index: int
@@ -67,27 +96,22 @@ class Vectors3D:
         """
         if up_index not in [0, 1, 2]:
             raise ValueError(f"Invalid up index: {up_index}")
-        azimuthal_angles = np.arccos(np.clip(self.unit_vectors[..., up_index], -1, 1)).flatten()
-        return Angle(
-            value=azimuthal_angles, 
-            unit=AngleUnit.RADIAN
-            )
+        azimuthal_angles = np.arccos(
+            np.clip(self.unit_vectors[..., up_index], -1, 1)
+        ).flatten()
+        return Angle(value=azimuthal_angles, unit=AngleUnit.RADIAN)
 
-    def to_polar_angles(
-        self, 
-        forward_index: int, 
-        right_index: int
-        ) -> Angle:
+    def to_polar_angles(self, forward_index: int, right_index: int) -> Angle:
         """
         Convert the points to polar angles.
-        
+
         Parameters
         ----------
         forward_index: int
             The index of the forward axis.
         right_index: int
             The index of the right axis.
-            
+
         Returns
         -------
         Angle:
@@ -101,18 +125,14 @@ class Vectors3D:
             raise ValueError("Forward index and right index must be different")
         unit_vectors = self.unit_vectors
         polar_angles = np.arctan2(
-            unit_vectors[..., right_index], 
-            unit_vectors[..., forward_index]
-            ).flatten()
-        return Angle(
-            value=polar_angles, 
-            unit=AngleUnit.RADIAN
-            )
+            unit_vectors[..., right_index], unit_vectors[..., forward_index]
+        ).flatten()
+        return Angle(value=polar_angles, unit=AngleUnit.RADIAN)
 
     def __len__(self) -> int:
         """
         Return the number of vectors.
-        
+
         Returns
         -------
         int:
@@ -120,13 +140,10 @@ class Vectors3D:
         """
         return len(self.value)
 
-    def __getitem__(
-        self, 
-        index: int
-        ) -> Vector3D:
+    def __getitem__(self, index: int) -> Vector3D:
         """
         Return the vector at the given index.
-        
+
         Returns
         -------
         Vector3D:
@@ -137,8 +154,6 @@ class Vectors3D:
     def __iter__(self) -> Iterator[Vector3D]:
         for value in self.value:
             yield Vector3D(value=value)
-    
+
     def __str__(self) -> str:
         return f"Vectors3D(n={len(self)}, shape={self.value.shape})"
-
-    

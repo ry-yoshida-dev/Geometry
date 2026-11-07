@@ -4,6 +4,7 @@ Abstract 2D line segment protocol (two endpoints) for scalar or batch storage.
 The type parameter T is either float (single-segment length) or NumericArray
 (per-row lengths for a batch). Coordinates follow image space (x right, y down).
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

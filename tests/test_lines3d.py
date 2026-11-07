@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+
 from geometry.spatial import Line3D, Lines3D, Point3D, Points3D, Vector3D, Vectors3D
 
 
@@ -57,9 +58,13 @@ class TestLines3D:
 
     def test_start_end_center(self, lines: Lines3D) -> None:
         assert isinstance(lines.start, Points3D)
-        np.testing.assert_allclose(lines.start.value, [[0.0, 0.0, 0.0], [1.0, 1.0, 1.0]])
+        np.testing.assert_allclose(
+            lines.start.value, [[0.0, 0.0, 0.0], [1.0, 1.0, 1.0]]
+        )
         np.testing.assert_allclose(lines.end.value, [[1.0, 2.0, 2.0], [1.0, 1.0, 1.0]])
-        np.testing.assert_allclose(lines.center.value, [[0.5, 1.0, 1.0], [1.0, 1.0, 1.0]])
+        np.testing.assert_allclose(
+            lines.center.value, [[0.5, 1.0, 1.0], [1.0, 1.0, 1.0]]
+        )
 
     def test_vectors(self, lines: Lines3D) -> None:
         vectors = lines.vectors

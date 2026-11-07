@@ -5,6 +5,7 @@ This module validates the storage vector with shape (2,) and exposes scalar
 x, y; helpers for tuple/list copies; and integration with Shapely Point and
 Vector2D for displacement between points.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -112,7 +113,7 @@ class Point2D(Point2DBase[NumericScalar, ShapelyPoint]):
     @property
     def shapely(self) -> ShapelyPoint:
         """
-        This location as a Shapely Point (zero-dimensional geometry).
+        Get the location as a Shapely Point (zero-dimensional geometry).
 
         Returns
         -------

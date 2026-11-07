@@ -4,6 +4,7 @@ Abstract 3D vector protocol for scalar or batch storage.
 The type parameter T is either NumericScalar (single component) or
 NumericArray (per-row values for a batch).
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

@@ -5,6 +5,7 @@ This module validates the storage array with shape (2, 2), with start and end
 as (x, y) rows; exposes endpoints as Point2D; and integrates with Shapely
 LineString and Vector2D for displacement along the segment.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -86,7 +87,7 @@ class Line2D(Line2DBase[float, LineString]):
     @property
     def shapely(self) -> LineString:
         """
-        This segment as a Shapely LineString (two vertices, not closed).
+        Get the segment as a Shapely LineString (two vertices, not closed).
 
         Returns
         -------

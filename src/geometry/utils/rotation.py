@@ -7,11 +7,15 @@ from handedness_rotation import (
 
 
 class GeometryRotationMatrix:
+    """
+    Rotation matrices around the coordinate axes.
+    """
+
     @staticmethod
     def register_from_x_radian(
         x_radian: float,
-        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> RotationMatrix:
+        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT,
+    ) -> RotationMatrix:
         """
         Register a rotation matrix for a rotation around the X-axis.
 
@@ -31,27 +35,20 @@ class GeometryRotationMatrix:
         sin = np.sin(x_radian)
         match coordinate_system:
             case CoordinateHandedness.RIGHT:
-                value = np.array([[1, 0, 0],
-                                [0, cos, -sin],
-                                [0, sin,  cos]])
+                value = np.array([[1, 0, 0], [0, cos, -sin], [0, sin, cos]])
             case CoordinateHandedness.LEFT:
-                value = np.array([[1, 0, 0],
-                                [0, cos, sin],
-                                [0, -sin,  cos]])
+                value = np.array([[1, 0, 0], [0, cos, sin], [0, -sin, cos]])
 
-        return RotationMatrix(
-            value=value, 
-            coordinate_handedness=coordinate_system
-            )
+        return RotationMatrix(value=value, coordinate_handedness=coordinate_system)
 
     @staticmethod
     def register_from_y_radian(
         y_radian: float,
-        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> RotationMatrix:
+        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT,
+    ) -> RotationMatrix:
         """
         Register a rotation matrix for a rotation around the Y-axis.
-        
+
         Parameters
         ----------
         y_radian : float
@@ -68,27 +65,20 @@ class GeometryRotationMatrix:
         sin = np.sin(y_radian)
         match coordinate_system:
             case CoordinateHandedness.RIGHT:
-                value = np.array([[cos, 0, sin],
-                                [0, 1, 0],
-                                [-sin, 0, cos]])
+                value = np.array([[cos, 0, sin], [0, 1, 0], [-sin, 0, cos]])
             case CoordinateHandedness.LEFT:
-                value = np.array([[cos, 0, -sin],
-                                [0, 1, 0],
-                                [sin, 0, cos]])
+                value = np.array([[cos, 0, -sin], [0, 1, 0], [sin, 0, cos]])
 
-        return RotationMatrix(
-            value=value, 
-            coordinate_handedness=coordinate_system
-            )
+        return RotationMatrix(value=value, coordinate_handedness=coordinate_system)
 
     @staticmethod
     def register_from_z_radian(
         z_radian: float,
-        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> RotationMatrix:
+        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT,
+    ) -> RotationMatrix:
         """
         Register a rotation matrix for a rotation around the Z-axis.
-        
+
         Parameters
         ----------
         z_radian : float
@@ -105,29 +95,22 @@ class GeometryRotationMatrix:
         sin = np.sin(z_radian)
         match coordinate_system:
             case CoordinateHandedness.RIGHT:
-                value = np.array([[cos, -sin, 0],
-                                [sin, cos, 0],
-                                [0, 0, 1]])
+                value = np.array([[cos, -sin, 0], [sin, cos, 0], [0, 0, 1]])
             case CoordinateHandedness.LEFT:
-                value = np.array([[cos, sin, 0],
-                                [-sin, cos, 0],
-                                [0, 0, 1]])
-        return RotationMatrix(
-            value=value, 
-            coordinate_handedness=coordinate_system
-            )
+                value = np.array([[cos, sin, 0], [-sin, cos, 0], [0, 0, 1]])
+        return RotationMatrix(value=value, coordinate_handedness=coordinate_system)
 
     @staticmethod
     def from_Rx_Ry_Rz(
-        Rx: RotationMatrix, 
-        Ry: RotationMatrix, 
-        Rz: RotationMatrix, 
+        Rx: RotationMatrix,
+        Ry: RotationMatrix,
+        Rz: RotationMatrix,
         order: IntrinsicRotationOrder = IntrinsicRotationOrder.XYZ,
-        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> RotationMatrix:
+        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT,
+    ) -> RotationMatrix:
         """
         Create a composite rotation matrix from individual rotation matrices.
-        
+
         This method implements INTRINSIC rotation, where each rotation is applied
         relative to the coordinate system that results from the previous rotations.
         This is the standard approach for camera poses and robot joint rotations.
@@ -158,13 +141,13 @@ class GeometryRotationMatrix:
 
     @classmethod
     def from_xyz_angles(
-        cls, 
-        x_radian: float, 
-        y_radian: float, 
-        z_radian: float, 
+        cls,
+        x_radian: float,
+        y_radian: float,
+        z_radian: float,
         order: IntrinsicRotationOrder = IntrinsicRotationOrder.ZXY,
-        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT
-        ) -> RotationMatrix:
+        coordinate_system: CoordinateHandedness = CoordinateHandedness.RIGHT,
+    ) -> RotationMatrix:
         """
         Create a composite rotation matrix from x, y, and z angles.
 
@@ -187,21 +170,14 @@ class GeometryRotationMatrix:
             Composite rotation matrix.
         """
         Rx = GeometryRotationMatrix.register_from_x_radian(
-            x_radian=x_radian, 
-            coordinate_system=coordinate_system
-            )
+            x_radian=x_radian, coordinate_system=coordinate_system
+        )
         Ry = GeometryRotationMatrix.register_from_y_radian(
-            y_radian=y_radian, 
-            coordinate_system=coordinate_system
-            )
+            y_radian=y_radian, coordinate_system=coordinate_system
+        )
         Rz = GeometryRotationMatrix.register_from_z_radian(
-            z_radian=z_radian, 
-            coordinate_system=coordinate_system
-            )
+            z_radian=z_radian, coordinate_system=coordinate_system
+        )
         return GeometryRotationMatrix.from_Rx_Ry_Rz(
-            Rx=Rx, 
-            Ry=Ry, 
-            Rz=Rz, 
-            order=order, 
-            coordinate_system=coordinate_system
-            )
+            Rx=Rx, Ry=Ry, Rz=Rz, order=order, coordinate_system=coordinate_system
+        )

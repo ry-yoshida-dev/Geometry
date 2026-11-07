@@ -5,6 +5,7 @@ The type parameter T is either NumericScalar (single component) or
 NumericArray (per-row values for a batch). Components follow image space
 (x right, y down), consistent with Point2D and Line2D.
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

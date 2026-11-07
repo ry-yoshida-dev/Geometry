@@ -4,6 +4,7 @@ Batch of 2D bounding boxes (N rows, 4 columns) extending base.Box2D.
 Concrete batched formats live in the xyxy and xywh subpackages. This module validates
 shape (N, 4) and provides per-box conversion, cropping, and Shapely access.
 """
+
 from __future__ import annotations
 
 from abc import abstractmethod
@@ -44,9 +45,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         """
         v = np.asarray(self.value)
         if v.ndim != 2 or v.shape[1] != 4:
-            raise ValueError(
-                f"boxes must have shape (N, 4), but got {v.shape}"
-            )
+            raise ValueError(f"boxes must have shape (N, 4), but got {v.shape}")
         self.value = v
 
     @property
@@ -132,7 +131,7 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         NumericArray
             Shape (N,) - maximum y per row.
         """
-    
+
     @property
     @abstractmethod
     def y_max(self) -> NumericArray:
@@ -170,9 +169,9 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         """
 
     def to_format(
-        self, 
-        target_format: Box2DFormat, 
-        ) -> NumericArray:
+        self,
+        target_format: Box2DFormat,
+    ) -> NumericArray:
         """
         Convert all rows to another coordinate layout.
 
@@ -190,8 +189,8 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
             self.value,
             input_format=self.box_format,
             output_format=target_format,
-            as_int=False
-            )
+            as_int=False,
+        )
 
     @property
     def crop_slice(self) -> list[tuple[slice, slice]]:
@@ -237,7 +236,9 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
             If any box has zero height.
         """
         if np.any(self.height == 0):
-            raise ZeroDivisionError("Height of at least one box is zero, cannot compute aspect ratio.")
+            raise ZeroDivisionError(
+                "Height of at least one box is zero, cannot compute aspect ratio."
+            )
         return np.divide(self.width, self.height, dtype=np.float64)
 
     @property
@@ -254,14 +255,12 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         polys: list[Polygon] = []
         for row in xyxy:
             x1, y1, x2, y2 = row
-            polys.append(
-                Polygon([(x1, y1), (x2, y1), (x2, y2), (x1, y2)])
-            )
+            polys.append(Polygon([(x1, y1), (x2, y1), (x2, y2), (x1, y2)]))
         return polys
 
     def __len__(self) -> int:
         """
-        Number of bounding boxes in the batch.
+        Get the number of bounding boxes in the batch.
 
         Returns
         -------
@@ -291,18 +290,11 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
 
     def __repr__(self) -> str:
         cls_name = self.__class__.__name__
-        box_str = np.array2string(self.value, precision=2, separator=', ')
-        return (
-            f"{cls_name}(value={box_str}, "
-            f"box_format='{self.box_format}')"
-        )
+        box_str = np.array2string(self.value, precision=2, separator=", ")
+        return f"{cls_name}(value={box_str}, box_format='{self.box_format}')"
 
     @classmethod
-    def register(
-        cls, 
-        value: NumericArray, 
-        box2d_format: Box2DFormat
-        ) -> Boxes2D:
+    def register(cls, value: NumericArray, box2d_format: Box2DFormat) -> Boxes2D:
         """
         Construct the appropriate concrete :class:`Boxes2D` for box2d_format.
 
@@ -321,9 +313,11 @@ class Boxes2D(Box2DBase[NumericArray, list[tuple[slice, slice]]]):
         match box2d_format:
             case Box2DFormat.XYXY | Box2DFormat.TLBR:
                 from .xyxy import Boxes2D_XYXY
+
                 return Boxes2D_XYXY(value=value)
             case Box2DFormat.XYWH | Box2DFormat.TLWH:
                 from .xywh import Boxes2D_XYWH
+
                 return Boxes2D_XYWH(value=value)
             case _:
                 raise ValueError(f"Unsupported box format: {box2d_format}")

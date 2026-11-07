@@ -4,6 +4,7 @@ Batch of bounding boxes in XYWH (top-left + size) format.
 Each row has length 4: x_min, y_min, width, height in absolute pixel
 coordinates. Width and height must be strictly positive for every box.
 """
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -41,9 +42,7 @@ class Boxes2D_XYWH(Boxes2D):
     def __post_init__(self) -> None:
         super().__post_init__()
         if np.any(self.width <= 0) or np.any(self.height <= 0):
-            raise ValueError(
-                "width and height must be greater than 0 for all boxes"
-            )
+            raise ValueError("width and height must be greater than 0 for all boxes")
 
     @property
     def box_format(self) -> Box2DFormat:

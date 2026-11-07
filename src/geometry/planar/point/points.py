@@ -4,6 +4,7 @@ Batch of 2D points (N rows, two columns) extending base.Point2D.
 Validates shape (N, 2), provides column-wise x/y, convex hull helpers, and
 Shapely polygon access when the collection is interpreted as a boundary.
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterator
@@ -141,7 +142,7 @@ class Points2D(Point2DBase[NumericArray, Polygon]):
         -------
         NumericArray: The distance matrix of the points with shape (n, n).
         """
-        return cdist(self.value, self.value, metric='euclidean')
+        return cdist(self.value, self.value, metric="euclidean")
 
     def append(
         self,

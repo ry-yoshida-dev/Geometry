@@ -4,6 +4,7 @@ Single 2D displacement vector extending the abstract base in base.
 Validates storage shape (2,); exposes scalar components, magnitude, unit
 direction; and helpers for orthogonality, parallelism, and conversion to Line2D.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -139,7 +140,10 @@ class Vector2D(Vector2DBase[NumericScalar]):
         float
             self.x * other.y - self.y * other.x.
         """
-        return float(self.value[0] * other_vector.value[1] - self.value[1] * other_vector.value[0])
+        return float(
+            self.value[0] * other_vector.value[1]
+            - self.value[1] * other_vector.value[0]
+        )
 
     def is_parallel(
         self,

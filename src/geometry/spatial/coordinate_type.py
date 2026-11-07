@@ -5,7 +5,7 @@ class CoordinateType(Enum):
     """
     CoordinateType is an enum that represents the type of coordinate system.
 
-    Attributes:
+    Attributes
     ----------
     CARTESIAN: str
         Cartesian coordinate system.
@@ -14,7 +14,7 @@ class CoordinateType(Enum):
     CYLINDRICAL: str
         Cylindrical coordinate system.
     """
+
     CARTESIAN = "cartesian"
     SPHERICAL = "spherical"
     CYLINDRICAL = "cylindrical"
-

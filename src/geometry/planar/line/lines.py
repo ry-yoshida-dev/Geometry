@@ -3,6 +3,7 @@ Batch of 2D line segments (N segments, two endpoints each) extending base.Line2D
 
 Validates shape (N, 2, 2) and provides per-segment length, endpoints, and Shapely access.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -41,9 +42,7 @@ class Lines2D(Line2DBase[NumericArray, list[LineString]]):
         """
         v = np.asarray(self.value)
         if v.ndim != 3 or v.shape[1:] != (2, 2):
-            raise ValueError(
-                f"lines must have shape (N, 2, 2), but got {v.shape}"
-            )
+            raise ValueError(f"lines must have shape (N, 2, 2), but got {v.shape}")
         self.value = v
 
     @property
@@ -120,9 +119,7 @@ class Lines2D(Line2DBase[NumericArray, list[LineString]]):
         out: list[LineString] = []
         for i in range(len(self)):
             seg = self.value[i]
-            out.append(
-                LineString([(seg[0, 0], seg[0, 1]), (seg[1, 0], seg[1, 1])])
-            )
+            out.append(LineString([(seg[0, 0], seg[0, 1]), (seg[1, 0], seg[1, 1])]))
         return out
 
     def __len__(self) -> int:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+
 from geometry.spatial import Point3D, Points3D, Vector3D
 
 
@@ -27,12 +28,16 @@ class TestPoint3D:
         assert point.list == [1.0, 2.0, 3.0]
 
     def test_addition_returns_point(self) -> None:
-        total = Point3D(value=np.array([1.0, 2.0, 3.0])) + Point3D(value=np.array([1.0, 1.0, 1.0]))
+        total = Point3D(value=np.array([1.0, 2.0, 3.0])) + Point3D(
+            value=np.array([1.0, 1.0, 1.0])
+        )
         assert isinstance(total, Point3D)
         assert total.tuple == (2.0, 3.0, 4.0)
 
     def test_subtraction_returns_vector(self) -> None:
-        difference = Point3D(value=np.array([4.0, 6.0, 3.0])) - Point3D(value=np.array([1.0, 2.0, 3.0]))
+        difference = Point3D(value=np.array([4.0, 6.0, 3.0])) - Point3D(
+            value=np.array([1.0, 2.0, 3.0])
+        )
         assert isinstance(difference, Vector3D)
         np.testing.assert_allclose(difference.value, [3.0, 4.0, 0.0])
 

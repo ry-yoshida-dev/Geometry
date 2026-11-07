@@ -6,10 +6,10 @@ from ....array_types import NumericArray
 class Box2dConverters:
     """
     Static methods for converting between different bounding box formats.
-    
+
     This class provides utility functions to convert bounding boxes between various
     coordinate representations commonly used in computer vision and object detection.
-    
+
     Supported formats:
     - xywh: (x, y, width, height) - top-left corner with width and height
     - xyxy: (x1, y1, x2, y2) - top-left and bottom-right corners
@@ -17,19 +17,19 @@ class Box2dConverters:
     - uvsr: (cx, cy, area, aspect_ratio) - center point with area and width/height ratio
     - uvah: (cx, cy, aspect_ratio, height) - center point with aspect ratio and height
     """
-    
+
     @staticmethod
     def xywh2xyxy(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (x1, y1, x2, y2) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
@@ -39,14 +39,14 @@ class Box2dConverters:
     def xywh2uvwh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (cx, cy, width, height) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in uvwh format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
@@ -56,14 +56,14 @@ class Box2dConverters:
     def xywh2uvsr(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (cx, cy, area, aspect_ratio) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in uvsr format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
@@ -76,14 +76,14 @@ class Box2dConverters:
     def xywh2uvah(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x, y, width, height) to (cx, cy, aspect_ratio, height) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in xywh format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in uvah format with shape (N, 4)
         """
         x, y, w, h = np.split(boxes, 4, axis=-1)
@@ -96,14 +96,14 @@ class Box2dConverters:
     def xyxy2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x1, y1, x2, y2) to (x, y, width, height) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in xyxy format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         x1, y1, x2, y2 = np.split(boxes, 4, axis=-1)
@@ -113,14 +113,14 @@ class Box2dConverters:
     def xyxy2uvsr(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x1, y1, x2, y2) to (cx, cy, area, aspect_ratio) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in xyxy format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in uvsr format with shape (N, 4)
         """
         x1, y1, x2, y2 = np.split(boxes, 4, axis=-1)
@@ -136,14 +136,14 @@ class Box2dConverters:
     def xyxy2uvah(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (x1, y1, x2, y2) to (cx, cy, aspect_ratio, height) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in xyxy format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in uvah format with shape (N, 4)
         """
         x1, y1, x2, y2 = np.split(boxes, 4, axis=-1)
@@ -157,14 +157,14 @@ class Box2dConverters:
     def uvah2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, aspect_ratio, height) to (x, y, width, height) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in uvah format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         cx, cy, r, h = np.split(boxes, 4, axis=-1)
@@ -175,14 +175,14 @@ class Box2dConverters:
     def uvah2xyxy(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, aspect_ratio, height) to (x1, y1, x2, y2) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in uvah format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
         cx, cy, r, h = np.split(boxes, 4, axis=-1)
@@ -193,14 +193,14 @@ class Box2dConverters:
     def uvwh2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, width, height) to (x, y, width, height) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in uvwh format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         cx, cy, w, h = np.split(boxes, 4, axis=-1)
@@ -210,14 +210,14 @@ class Box2dConverters:
     def uvsr2xywh(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, area, aspect_ratio) to (x, y, width, height) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in uvsr format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in xywh format with shape (N, 4)
         """
         cx, cy, s, r = np.split(boxes, 4, axis=-1)
@@ -229,18 +229,18 @@ class Box2dConverters:
     def uvsr2xyxy(boxes: NumericArray) -> NumericArray:
         """
         Convert boxes from (cx, cy, area, aspect_ratio) to (x1, y1, x2, y2) format.
-        
-        Parameters:
+
+        Parameters
         ----------
         boxes: NumericArray
             Input boxes in uvsr format with shape (N, 4)
-            
-        Returns:
-        ---------
+
+        Returns
+        -------
         NumericArray: Converted boxes in xyxy format with shape (N, 4)
         """
         cx, cy, s, r = np.split(boxes, 4, axis=-1)
-        
+
         w = np.sqrt(s * r)
         h = np.sqrt(s / r)
         x1 = cx - w / 2

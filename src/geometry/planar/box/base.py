@@ -4,6 +4,7 @@ Abstract 2D bounding box protocol for scalar or vector coordinate fields.
 T is either NumericScalar (single box) or NumericArray (batch).
 Coordinates are always absolute pixel values in image space (x right, y down).
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -32,6 +33,7 @@ class Box2D[
     value : NumericArray
         For a single box, shape (4,); for a batch, shape (N, 4).
     """
+
     value: NumericArray
 
     @property
@@ -117,7 +119,7 @@ class Box2D[
         T
             Maximum y in pixel coordinates.
         """
-    
+
     @property
     @abstractmethod
     def y_max(self) -> T:
@@ -175,9 +177,9 @@ class Box2D[
         """
 
     def to_format(
-        self, 
-        target_format: Box2DFormat, 
-        ) -> NumericArray:
+        self,
+        target_format: Box2DFormat,
+    ) -> NumericArray:
         """
         Convert stored coordinates to another layout.
 
@@ -195,8 +197,8 @@ class Box2D[
             self.value,
             input_format=self.box_format,
             output_format=target_format,
-            as_int=False
-            )
+            as_int=False,
+        )
 
     @property
     @abstractmethod
@@ -217,22 +219,17 @@ class Box2D[
 
     def __repr__(self) -> str:
         cls_name = self.__class__.__name__
-        box_str = np.array2string(self.value, precision=2, separator=', ')
-        return (
-            f"{cls_name}(value={box_str}, "
-            f"box_format='{self.box_format}')"
-        )
+        box_str = np.array2string(self.value, precision=2, separator=", ")
+        return f"{cls_name}(value={box_str}, box_format='{self.box_format}')"
 
     @classmethod
     @abstractmethod
     def register(
-        cls, 
-        value: NumericArray, 
-        box2d_format: Box2DFormat
-        ) -> (
-            Box2D[NumericScalar, tuple[slice, slice]]
-            | Box2D[NumericArray, list[tuple[slice, slice]]]
-        ):
+        cls, value: NumericArray, box2d_format: Box2DFormat
+    ) -> (
+        Box2D[NumericScalar, tuple[slice, slice]]
+        | Box2D[NumericArray, list[tuple[slice, slice]]]
+    ):
         """
         Construct a concrete subclass from raw array data.
 
@@ -248,5 +245,3 @@ class Box2D[
         Box2D
             Concrete implementation instance.
         """
-
-

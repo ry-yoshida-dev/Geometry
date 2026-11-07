@@ -20,6 +20,7 @@ class Vector2DPair:
     vector2: Vector2D
         The second vector.
     """
+
     vector1: Vector2D
     vector2: Vector2D
 
@@ -58,10 +59,7 @@ class Vector2DPair:
         u2 = self.vector2.unit_vector
         cos_theta = np.clip(np.dot(u1, u2), -1.0, 1.0)
         theta = np.arccos(cos_theta)
-        return Angle(
-            value=np.array([theta]),
-            unit=AngleUnit.RADIAN
-            )
+        return Angle(value=np.array([theta]), unit=AngleUnit.RADIAN)
 
     @property
     def dot_product(self) -> float:
@@ -84,6 +82,3 @@ class Vector2DPair:
         float: The z-component of vector1 x vector2.
         """
         return self.vector1.cross(self.vector2)
-
-
-

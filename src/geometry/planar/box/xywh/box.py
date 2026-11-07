@@ -4,6 +4,7 @@ Single bounding box in XYWH (top-left + size) format.
 The value array has length 4: x_min, y_min, width, height in absolute pixel
 coordinates. Width and height must be strictly positive.
 """
+
 from dataclasses import dataclass
 
 import numpy as np

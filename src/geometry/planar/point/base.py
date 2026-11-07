@@ -5,6 +5,7 @@ The type parameter T is either NumericScalar (single coordinate component) or
 NumericArray (per-row components for a batch). Coordinates follow image space
 (x right, y down).
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

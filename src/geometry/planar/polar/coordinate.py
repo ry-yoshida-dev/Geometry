@@ -12,7 +12,7 @@ from ...array_types import NumericArray
 class PolarCoordinate:
     """
     Polar coordinate (r, theta) in polar coordinate system.
-    
+
     Parameters
     ----------
     radius: NumericArray
@@ -20,6 +20,7 @@ class PolarCoordinate:
     angle: Angle
         The angle of the polar coordinate with shape (n,).
     """
+
     radius: NumericArray
     angle: Angle
 
@@ -41,19 +42,19 @@ class PolarCoordinate:
     def u(self) -> NumericArray:
         """
         The u coordinate.
-        
+
         Returns
         -------
         NumericArray:
             The u coordinate
         """
         return self.radius * np.cos(self.radian)
-    
+
     @property
     def v(self) -> NumericArray:
         """
         The v coordinate.
-        
+
         Returns
         -------
         NumericArray:
@@ -65,7 +66,7 @@ class PolarCoordinate:
     def uv(self) -> NumericArray:
         """
         The uv coordinate.
-        
+
         Returns
         -------
         NumericArray:
@@ -78,19 +79,19 @@ class PolarCoordinate:
     def radian(self) -> NumericArray:
         """
         The angle in radians.
-        
+
         Returns
         -------
         NumericArray:
             The angle in radians.
         """
         return self.angle.radian
-    
+
     @property
     def degree(self) -> NumericArray:
         """
         The angle in degrees.
-        
+
         Returns
         -------
         NumericArray:
@@ -101,7 +102,7 @@ class PolarCoordinate:
     def __len__(self) -> int:
         """
         Return the length of the polar coordinate.
-        
+
         Returns
         -------
         int:
@@ -110,14 +111,10 @@ class PolarCoordinate:
         return len(self.radius)
 
     @classmethod
-    def from_uv(
-        cls, 
-        u: NumericArray, 
-        v: NumericArray
-        ) -> PolarCoordinate:
+    def from_uv(cls, u: NumericArray, v: NumericArray) -> PolarCoordinate:
         """
         Create a polar coordinate from u and v.
-        
+
         Parameters
         ----------
         u: NumericArray
@@ -134,4 +131,3 @@ class PolarCoordinate:
         angle_array = np.arctan2(v, u)
         angle = Angle(value=angle_array, unit=AngleUnit.RADIAN)
         return cls(radius=radius, angle=angle)
-    

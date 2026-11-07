@@ -1,15 +1,16 @@
-
-
 from .line import Line2D
 from .point import Point2D, Points2D
 
 
 class Geometry2DMeasure:
+    """
+    Distance measurement between 2D shapes.
+    """
+
     @staticmethod
     def measure_distance(
-        input1: Line2D | Point2D | Points2D, 
-        input2: Line2D | Point2D | Points2D
-        ) -> float:
+        input1: Line2D | Point2D | Points2D, input2: Line2D | Point2D | Points2D
+    ) -> float:
         """
         Measure the distance between two input shapes.
 
